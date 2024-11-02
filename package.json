@@ -15,7 +15,8 @@
     "@triplit/react": "^0.4.10",
     "date-fns": "^4.1.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-keyboard-control": "^1.2.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
