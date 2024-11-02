@@ -1,0 +1,27 @@
+.friendCardContainer {
+  margin-bottom: 0.75vw;
+  padding: 0.5vw;
+  padding-left: 1vw;
+  border: 1px solid gray;
+  border-radius: 1vw;
+  box-shadow: -1px 1px 0px 0px gray;
+}
+
+.personIconContainer {
+  display: inline-block;
+  margin-right: 0.75vw;
+}
+
+.nameContainer {
+  font-size: 1.5em;
+}
+
+.firstName {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.lastName {
+  display: inline-block;
+  margin-left: 0.25em;
+}
