@@ -1,15 +1,15 @@
 .friendCardContainer {
-  margin-bottom: 0.75vw;
-  padding: 0.5vw;
-  padding-left: 1vw;
+  margin-bottom: 12px;
+  padding: 10px;
+  padding-left: 15px;
   border: 1px solid gray;
-  border-radius: 1vw;
+  border-radius: 15px;
   box-shadow: -1px 1px 0px 0px gray;
 }
 
 .personIconContainer {
   display: inline-block;
-  margin-right: 0.75vw;
+  margin-right: 12px;
 }
 
 .nameContainer {

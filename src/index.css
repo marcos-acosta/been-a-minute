@@ -1,5 +1,17 @@
+html {
+  --theme-black: rgb(36, 37, 40);
+  --theme-light-black: rgb(63, 64, 68);
+}
+
 body {
   margin: 0;
+  color: var(--theme-black);
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
 }
 
 .notoSerifBasic {

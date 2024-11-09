@@ -3,20 +3,54 @@
 }
 
 .filterPanel {
-  width: 100%;
-  height: 5vh;
+  width: 70%;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2vw;
-  padding-top: 1vw;
-  padding-bottom: 1vw;
+  margin-bottom: 25px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 15%;
+  padding-right: 15%;
 }
 
 .friendListContainer {
   width: 70%;
   margin-left: 15%;
+}
+
+.themedButton {
+  padding: 10px;
+  background-color: var(--theme-black);
+  box-shadow: -1px 1px 0px 0px var(--theme-black);
+  color: white;
+  border-radius: 10px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  transition-property: background-color, box-shadow;
+  transition-duration: 0.5s;
+}
+
+.withinButtonIcon {
+  margin-right: 5px;
+}
+
+.addFriendButtonContainer {
+  flex-grow: 1;
+}
+
+.addHangButtonContainer {
+  flex-grow: 1;
+  text-align: right;
+}
+
+.themedButton:hover,
+.themedButton:focus {
+  background-color: var(--theme-light-black);
+  box-shadow: -1px 1px 0px 0px var(--theme-light-black);
 }
 
 .searchInput {
@@ -25,13 +59,14 @@
   font-size: inherit;
   outline: none;
   border: 1px solid gray;
-  height: 2vw;
-  border-radius: 1vw;
+  border-radius: 10px;
   box-shadow: -1px 1px 0px 0px gray;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .searchIconContainer {
-  margin-right: 0.5vw;
+  margin-right: 12px;
   color: gray;
   display: flex;
   flex-direction: row;
