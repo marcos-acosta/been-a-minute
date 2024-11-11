@@ -15,6 +15,7 @@ import {
 } from "@radix-ui/react-icons";
 import useKeyboardControl, { KeyboardHook } from "react-keyboard-control";
 import AddFriendForm from "./components/AddFriendForm";
+import RecordHangForm from "./components/RecordHangForm";
 
 function useFriends() {
   const friendsQuery = triplit.query("friends").include("meetings");
@@ -25,6 +26,7 @@ function useFriends() {
 enum PageState {
   FRIEND_LIST,
   ADD_A_FRIEND,
+  RECORD_A_HANG,
 }
 
 export default function App() {
@@ -48,56 +50,76 @@ export default function App() {
     }
   };
 
+  const switchToAddFriendForm = () => setPageState(PageState.ADD_A_FRIEND);
+  const switchToRecordHangForm = () => setPageState(PageState.RECORD_A_HANG);
+  const switchToFriendList = () => setPageState(PageState.FRIEND_LIST);
+
   const keyboardHooks: KeyboardHook[] = [
     {
       keyboardEvent: [{ key: "/" }],
       callback: focusSearchBar,
       preventDefault: true,
+      allowWhen: pageState === PageState.FRIEND_LIST,
+    },
+    {
+      keyboardEvent: [{ key: "f" }],
+      callback: switchToAddFriendForm,
+      allowWhen: pageState === PageState.FRIEND_LIST,
+    },
+    {
+      keyboardEvent: [{ key: "h" }],
+      callback: switchToRecordHangForm,
+      allowWhen: pageState === PageState.FRIEND_LIST,
     },
   ];
   useKeyboardControl(keyboardHooks);
 
-  const switchToAddFriendForm = () => setPageState(PageState.ADD_A_FRIEND);
-
   return (
-    <div className={combineClasses(styles.appContainer, "sourceSansBasic")}>
-      {pageState === PageState.FRIEND_LIST ? (
-        <>
-          <div className={styles.filterPanel}>
-            <div className={styles.addFriendButtonContainer}>
-              <button
-                className={styles.themedButton}
-                onClick={switchToAddFriendForm}
-              >
-                <PersonIcon className={styles.withinButtonIcon} /> add friend
-              </button>
+    friends && (
+      <div className={combineClasses(styles.appContainer, "sourceSansBasic")}>
+        {pageState === PageState.FRIEND_LIST ? (
+          <>
+            <div className={styles.filterPanel}>
+              <div className={styles.addFriendButtonContainer}>
+                <button
+                  className={styles.themedButton}
+                  onClick={switchToAddFriendForm}
+                >
+                  <PersonIcon className={styles.withinButtonIcon} /> add friend
+                </button>
+              </div>
+              <div className={styles.searchIconContainer}>
+                <MagnifyingGlassIcon />
+              </div>
+              <input
+                className={styles.searchInput}
+                value={searchText}
+                placeholder="fuzzy search"
+                onChange={(e) => setSearchText(e.target.value)}
+                ref={searchBarRef}
+              />
+              <div className={styles.addHangButtonContainer}>
+                <button
+                  className={styles.themedButton}
+                  onClick={switchToRecordHangForm}
+                >
+                  <Pencil1Icon className={styles.withinButtonIcon} />
+                  record hang
+                </button>
+              </div>
             </div>
-            <div className={styles.searchIconContainer}>
-              <MagnifyingGlassIcon />
+            <div className={styles.friendListContainer}>
+              {sortedFriends?.map((friend) => (
+                <FriendCard key={friend.id} friend={friend} />
+              ))}
             </div>
-            <input
-              className={styles.searchInput}
-              value={searchText}
-              placeholder="fuzzy search"
-              onChange={(e) => setSearchText(e.target.value)}
-              ref={searchBarRef}
-            />
-            <div className={styles.addHangButtonContainer}>
-              <button className={styles.themedButton}>
-                <Pencil1Icon className={styles.withinButtonIcon} />
-                record hang
-              </button>
-            </div>
-          </div>
-          <div className={styles.friendListContainer}>
-            {sortedFriends?.map((friend) => (
-              <FriendCard key={friend.id} friend={friend} />
-            ))}
-          </div>
-        </>
-      ) : (
-        <AddFriendForm />
-      )}
-    </div>
+          </>
+        ) : pageState === PageState.ADD_A_FRIEND ? (
+          <AddFriendForm onSubmit={switchToFriendList} />
+        ) : (
+          <RecordHangForm onSubmit={switchToFriendList} friends={friends} />
+        )}
+      </div>
+    )
   );
 }

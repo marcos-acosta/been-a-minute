@@ -3,10 +3,15 @@ import styles from "./AddFriendForm.module.css";
 import { triplit } from "../../triplit/client";
 import { TimeUnit } from "../../triplit/schema";
 
-export default function AddFriendForm() {
+interface AddFriendFormProps {
+  onSubmit: () => void;
+}
+
+export default function AddFriendForm(props: AddFriendFormProps) {
   const [fullName, setFullName] = useState("");
   const [isLocal, setIsLocal] = useState(true);
   const [maxTimeAmount, setMaxTimeAmount] = useState(1);
+  const [keepInTouch, setKeepInTouch] = useState(true);
   const [maxTimeUnit, setMaxTimeUnit] = useState("month" as TimeUnit);
   const [inputTag, setTag] = useState("");
   const [tags, setTags] = useState([] as string[]);
@@ -18,14 +23,17 @@ export default function AddFriendForm() {
     await triplit.insert("friends", {
       first_name: first,
       last_name: last,
-      relation: note,
+      relation: note.length > 0 ? note : undefined,
       long_distance: !isLocal,
-      max_time_between_contact: {
-        amount: maxTimeAmount,
-        unit: maxTimeUnit,
-      },
+      max_time_between_contact: keepInTouch
+        ? {
+            amount: maxTimeAmount,
+            unit: maxTimeUnit,
+          }
+        : undefined,
       tag_ids: new Set(tags),
     });
+    props.onSubmit();
   };
 
   const considerPlural = (str: string) =>
@@ -70,30 +78,42 @@ export default function AddFriendForm() {
           />
         </div>
         <div>
-          <label htmlFor="time-amount">
-            What's the longest you'd like to go without seeing them?
+          <label htmlFor="keep-in-touch">
+            Do you want to keep in touch?
+            <input
+              type="checkbox"
+              checked={keepInTouch}
+              onChange={(e) => setKeepInTouch(e.target.checked)}
+            />
           </label>
-          <input
-            type="number"
-            id="time-amount"
-            value={maxTimeAmount}
-            onChange={(e) =>
-              !isNaN(+e.target.value) &&
-              setMaxTimeAmount(parseInt(e.target.value))
-            }
-          />
-          <select
-            value={maxTimeUnit}
-            onChange={(e) => setMaxTimeUnit(e.target.value as TimeUnit)}
-          >
-            <option value="day">{considerPlural("day")}</option>
-            <option value="week">{considerPlural("week")}</option>
-            <option value="month">{considerPlural("month")}</option>
-            <option value="year">{considerPlural("year")}</option>
-          </select>
         </div>
+        {keepInTouch && (
+          <div>
+            <label htmlFor="time-amount">
+              What's the longest you'd like to go without seeing them?
+            </label>
+            <input
+              type="number"
+              id="time-amount"
+              value={maxTimeAmount}
+              onChange={(e) =>
+                !isNaN(+e.target.value) &&
+                setMaxTimeAmount(parseInt(e.target.value))
+              }
+            />
+            <select
+              value={maxTimeUnit}
+              onChange={(e) => setMaxTimeUnit(e.target.value as TimeUnit)}
+            >
+              <option value="day">{considerPlural("day")}</option>
+              <option value="week">{considerPlural("week")}</option>
+              <option value="month">{considerPlural("month")}</option>
+              <option value="year">{considerPlural("year")}</option>
+            </select>
+          </div>
+        )}
         <div>
-          <label htmlFor="note">How do you know them?</label>
+          <label htmlFor="note">What do you want to remember about them?</label>
           <input
             id="note"
             value={note}

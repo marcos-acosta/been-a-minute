@@ -1,5 +1,4 @@
 .friendCardContainer {
-  margin-bottom: 12px;
   padding: 10px;
   padding-left: 15px;
   border: 1px solid gray;
@@ -24,4 +23,5 @@
 .lastName {
   display: inline-block;
   margin-left: 0.25em;
+  font-style: italic;
 }
