@@ -21,9 +21,6 @@ function getDaysFromHangFrequency({
   return UNIT_TO_DAYS[unit] * amount;
 }
 
-export const combineClasses = (...classNames: (string | undefined | null)[]) =>
-  classNames.filter(Boolean).join(" ");
-
 export const filterFriendsByQuery = (friends: Friend[], query: string) => {
   return friends.filter(
     (friend) =>
@@ -39,38 +36,50 @@ export const sortHangsByRecency = (hangs: HangBasic[]) =>
 
 export const getLastHangDate = (friend: Friend) => {
   const sortedHangs = sortHangsByRecency(friend.meetings);
-  console.log(friend.first_name, sortedHangs);
   if (sortedHangs.length === 0) {
     return undefined;
   }
   return sortedHangs[0].date_contacted;
 };
 
+const getDaysSinceLastHang = (friend: Friend) => {
+  const lastHangDate = getLastHangDate(friend);
+  if (lastHangDate === undefined) {
+    return undefined;
+  }
+  return differenceInCalendarDays(Date.now(), lastHangDate);
+};
+
 export const getDaysOverdue = (friend: Friend) => {
   if (!friend.max_time_between_contact) {
     return undefined;
   }
-  const lastHangDate = getLastHangDate(friend);
-  if (!lastHangDate) {
+  const daysSinceLastHang = getDaysSinceLastHang(friend);
+  if (daysSinceLastHang === undefined) {
     return undefined;
   }
   const desiredMaxTimeBetweenHangs = getDaysFromHangFrequency(
     friend.max_time_between_contact
   );
-  const actualDaysSinceLastHang = differenceInCalendarDays(
-    Date.now(),
-    lastHangDate
-  );
-  return actualDaysSinceLastHang - desiredMaxTimeBetweenHangs;
+  return daysSinceLastHang - desiredMaxTimeBetweenHangs;
 };
 
 const compareFriendsNames = (friendA: Friend, friendB: Friend) =>
   getFullName(friendA) > getFullName(friendB) ? 1 : -1;
 
+const undefinedToInfinity = (n: number | undefined) =>
+  n === undefined ? Infinity : n;
+
 export const sortFriendsByOverdueThenName = (friends: Friend[]) =>
   friends.sort((friendA, friendB) => {
-    const daysOverdueA = getDaysOverdue(friendA) || Infinity;
-    const daysOverdueB = getDaysOverdue(friendB) || Infinity;
+    const daysOverdueA = undefinedToInfinity(getDaysOverdue(friendA));
+    const daysOverdueB = undefinedToInfinity(getDaysOverdue(friendB));
+    const daysSinceLastHangA = undefinedToInfinity(
+      getDaysSinceLastHang(friendA)
+    );
+    const daysSinceLastHangB = undefinedToInfinity(
+      getDaysSinceLastHang(friendB)
+    );
     const wantToKeepInTouchWithFriendA = Boolean(
       friendA.max_time_between_contact
     );
@@ -85,24 +94,8 @@ export const sortFriendsByOverdueThenName = (friends: Friend[]) =>
       );
     } else if (wantToKeepInTouchWithFriendA && wantToKeepInTouchWithFriendB) {
       comparatorValue = daysOverdueB - daysOverdueA;
+    } else {
+      comparatorValue = daysSinceLastHangB - daysSinceLastHangA;
     }
     return comparatorValue || compareFriendsNames(friendA, friendB);
   });
-
-const setDateToMidday = (date: Date) => {
-  let newDate = new Date(date);
-  newDate.setHours(12);
-  newDate.setMinutes(0);
-  newDate.setSeconds(0);
-  newDate.setMilliseconds(0);
-  return newDate;
-};
-
-export const convertLocalDateStringToDate = (dateString: string) => {
-  let date = setDateToMidday(new Date());
-  const [year, month, day] = dateString.split("-");
-  date.setFullYear(parseInt(year));
-  date.setMonth(parseInt(month) - 1);
-  date.setDate(parseInt(day));
-  return date;
-};

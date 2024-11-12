@@ -1,10 +1,12 @@
 import { useState } from "react";
 import styles from "./AddFriendForm.module.css";
 import { triplit } from "../../triplit/client";
-import { TimeUnit } from "../../triplit/schema";
+import { Tag, TagBasic, TimeUnit } from "../../triplit/schema";
+import AutocompleteInput from "./AutocompleteInput";
 
 interface AddFriendFormProps {
   onSubmit: () => void;
+  tags: Tag[];
 }
 
 export default function AddFriendForm(props: AddFriendFormProps) {
@@ -13,8 +15,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
   const [maxTimeAmount, setMaxTimeAmount] = useState(1);
   const [keepInTouch, setKeepInTouch] = useState(true);
   const [maxTimeUnit, setMaxTimeUnit] = useState("month" as TimeUnit);
-  const [inputTag, setTag] = useState("");
-  const [tags, setTags] = useState([] as string[]);
+  const [selectedTags, setSelectedTags] = useState([] as Tag[]);
   const [note, setNote] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,18 +32,22 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             unit: maxTimeUnit,
           }
         : undefined,
-      tag_ids: new Set(tags),
+      tag_ids: new Set(selectedTags.map((tag) => tag.id)),
     });
     props.onSubmit();
   };
 
+  const addTagToDatabase = async (
+    tagText: string
+  ): Promise<TagBasic | undefined> => {
+    const insertedTag = await triplit.insert("tags", {
+      name: tagText,
+    });
+    return insertedTag.output;
+  };
+
   const considerPlural = (str: string) =>
     maxTimeAmount !== 1 ? `${str}s` : str;
-
-  const addTag = () => {
-    setTags([...tags, inputTag]);
-    setTag("");
-  };
 
   const splitFirstAndLastName = (): [string, string | undefined] => {
     const fullNameTrimmed = fullName.trim();
@@ -67,6 +72,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             id="name"
             onChange={(e) => setFullName(e.target.value)}
             value={fullName}
+            autoFocus
           />
         </div>
         <div>
@@ -122,19 +128,15 @@ export default function AddFriendForm(props: AddFriendFormProps) {
         </div>
         <div>
           <label htmlFor="tag-input">Tags:</label>
-          <input
-            id="tag-input"
-            value={inputTag}
-            onChange={(e) => setTag(e.target.value)}
+          <AutocompleteInput
+            options={props.tags as TagBasic[]}
+            selectedOptions={selectedTags as TagBasic[]}
+            setSelectedOptions={setSelectedTags as (t: TagBasic[]) => void}
+            labelFunction={(tag) => tag.name}
+            getOptionId={(tag) => tag.id}
+            allowAddNew
+            addNewOption={addTagToDatabase}
           />
-          <button onClick={addTag} type="button">
-            Add
-          </button>
-        </div>
-        <div>
-          {tags.map((tag) => (
-            <div key={tag}>{tag}</div>
-          ))}
         </div>
         <button type="submit">Add</button>
       </form>

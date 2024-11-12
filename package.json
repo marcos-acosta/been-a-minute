@@ -15,6 +15,7 @@
     "@triplit/react": "^0.4.10",
     "date-fns": "^4.1.0",
     "react": "^18.3.1",
+    "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
     "react-keyboard-control": "^1.2.5"
   },

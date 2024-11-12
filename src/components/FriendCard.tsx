@@ -5,11 +5,8 @@ import {
   formatTimeSinceLastHang,
 } from "../logic/rendering";
 import styles from "./FriendCard.module.css";
-import {
-  combineClasses,
-  getDaysOverdue,
-  getLastHangDate,
-} from "../logic/logic";
+import { getDaysOverdue, getLastHangDate } from "../logic/logic";
+import { combineClasses } from "../logic/util";
 
 export default function FriendCard({ friend }: { friend: Friend }) {
   const lastHangDate = getLastHangDate(friend);

@@ -1,8 +1,11 @@
 import { useState } from "react";
-import styles from "./RecordHangForm.module.css";
 import { triplit } from "../../triplit/client";
 import { Friend } from "../../triplit/schema";
-import { convertLocalDateStringToDate, getFullName } from "../logic/logic";
+import { getFullName } from "../logic/logic";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import styles from "./RecordHangForm.module.css";
+import AutocompleteInput from "./AutocompleteInput";
 
 interface RecordHangProps {
   onSubmit: () => void;
@@ -10,25 +13,19 @@ interface RecordHangProps {
 }
 
 export default function RecordHangForm(props: RecordHangProps) {
-  const [hangDate, setHangDate] = useState("");
-  const [friendIds, setFriendIds] = useState([] as string[]);
-  const [friendNameInput, setFriendNameInput] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date() as Date | null);
+  const [selectedFriends, setSelectedFriends] = useState([] as Friend[]);
   const [note, setNote] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await triplit.insert("friend_log", {
-      date_contacted: convertLocalDateStringToDate(hangDate),
-      friend_ids: new Set(friendIds),
-      notes: note.length > 0 ? note : undefined,
-    });
-    props.onSubmit();
-  };
-
-  const addFriendToList = () => {
-    if (friendNameInput.length > 0) {
-      setFriendIds([...friendIds, friendNameInput]);
-      setFriendNameInput("");
+    if (selectedDate && selectedFriends.length > 0) {
+      await triplit.insert("friend_log", {
+        date_contacted: selectedDate,
+        friend_ids: new Set(selectedFriends.map((friend) => friend.id)),
+        notes: note.length > 0 ? note : undefined,
+      });
+      props.onSubmit();
     }
   };
 
@@ -37,30 +34,20 @@ export default function RecordHangForm(props: RecordHangProps) {
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="friend-input">Who&apos;d you hang with?</label>
-          <input
-            id="friend-input"
-            value={friendNameInput}
-            onChange={(e) => setFriendNameInput(e.target.value)}
+          <AutocompleteInput
+            options={props.friends}
+            selectedOptions={selectedFriends}
+            setSelectedOptions={setSelectedFriends}
+            labelFunction={(friend) => getFullName(friend)}
+            getOptionId={(friend) => friend.id}
+            autoFocus
           />
-          <button onClick={addFriendToList} type="button">
-            Add
-          </button>
-        </div>
-        <div>
-          {friendIds.map((friendId) => (
-            <div key={friendId}>
-              {getFullName(
-                props.friends.find((friend) => friend.id === friendId) as Friend
-              )}
-            </div>
-          ))}
         </div>
         <div>
           <label htmlFor="date">When did you meet up?</label>
-          <input
-            id="date"
-            onChange={(e) => setHangDate(e.target.value)}
-            value={hangDate}
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
           />
         </div>
         <div>

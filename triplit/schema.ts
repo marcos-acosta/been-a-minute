@@ -66,9 +66,13 @@ export const schema = {
 } satisfies ClientSchema;
 
 export type FriendBasic = Entity<typeof schema, "friends">;
+export type TagBasic = Entity<typeof schema, "tags">;
 export type HangBasic = Entity<typeof schema, "friend_log">;
 export type TimeUnit = "day" | "week" | "month" | "year";
 
 export interface Friend extends FriendBasic {
   meetings: HangBasic[];
+}
+export interface Tag extends TagBasic {
+  tagged_friends: FriendBasic[];
 }
