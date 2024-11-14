@@ -1,0 +1,69 @@
+.autocompleteInputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid gray;
+  height: 100%;
+}
+
+.selectedOptionsContainer {
+  margin-left: 5px;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+.selectedOption {
+  display: inline-block;
+  border: 1px solid gray;
+}
+
+.removeButton {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.textInput {
+  display: inline-block;
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.textInput:focus {
+  outline: none;
+}
+
+.dropdownContainer {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  height: min-content;
+}
+
+.suggestion {
+  display: inline-block;
+  border: 1px solid gray;
+  border-top: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.suggestion.selectedSuggestion {
+  background-color: rgb(228, 228, 228);
+}
+
+.suggestion:hover {
+  background-color: rgb(228, 228, 228);
+}
+
+.suggestionsContainer {
+  position: absolute;
+  display: flex;
+  top: 100%;
+  width: 100%;
+  flex-direction: column;
+  z-index: 1;
+}

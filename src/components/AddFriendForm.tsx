@@ -3,6 +3,7 @@ import styles from "./AddFriendForm.module.css";
 import { triplit } from "../../triplit/client";
 import { Tag, TagBasic, TimeUnit } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
+import { callbackOnEscape } from "../logic/util";
 
 interface AddFriendFormProps {
   onSubmit: () => void;
@@ -73,6 +74,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             onChange={(e) => setFullName(e.target.value)}
             value={fullName}
             autoFocus
+            autoComplete="off"
           />
         </div>
         <div>
@@ -106,6 +108,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
                 !isNaN(+e.target.value) &&
                 setMaxTimeAmount(parseInt(e.target.value))
               }
+              autoComplete="off"
             />
             <select
               value={maxTimeUnit}
@@ -124,6 +127,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             id="note"
             value={note}
             onChange={(e) => setNote(e.target.value)}
+            autoComplete="off"
           />
         </div>
         <div>

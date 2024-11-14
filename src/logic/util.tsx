@@ -34,6 +34,20 @@ export const callbackOnEscape = (
   }
 };
 
+export const callbackOn = (
+  event: React.KeyboardEvent,
+  key: string,
+  callbackFn: () => void,
+  preventDefault?: boolean
+) => {
+  if (event.key === key) {
+    callbackFn();
+    if (preventDefault) {
+      event.preventDefault();
+    }
+  }
+};
+
 export const andStopPropagate = (
   event: React.MouseEvent,
   callbackFn?: () => void
@@ -44,5 +58,6 @@ export const andStopPropagate = (
   }
 };
 
-export const combineClasses = (...classNames: (string | undefined | null)[]) =>
-  classNames.filter(Boolean).join(" ");
+export const combineClasses = (
+  ...classNames: (string | undefined | null | false)[]
+) => classNames.filter(Boolean).join(" ");

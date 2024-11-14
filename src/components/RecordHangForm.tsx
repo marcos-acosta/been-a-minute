@@ -58,6 +58,7 @@ export default function RecordHangForm(props: RecordHangProps) {
             id="note"
             value={note}
             onChange={(e) => setNote(e.target.value)}
+            autoComplete="off"
           />
         </div>
         <button type="submit">Add</button>

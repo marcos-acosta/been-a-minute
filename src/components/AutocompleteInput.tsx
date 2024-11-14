@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./AutocompleteInput.module.css";
-import { callbackOnEnter } from "../logic/util";
+// import formStyles from "./FormStyling.module.css";
+import { callbackOn, callbackOnEnter, combineClasses } from "../logic/util";
 
 export default function AutocompleteInput<OptionType>(props: {
   options: OptionType[];
@@ -15,6 +16,7 @@ export default function AutocompleteInput<OptionType>(props: {
   autoFocus?: boolean;
 }) {
   const [textInput, setTextInput] = useState("");
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const addNewOption = props.addNewOption;
   const formatNewOption =
@@ -60,6 +62,23 @@ export default function AutocompleteInput<OptionType>(props: {
     }
   };
 
+  const handleDelete = () => {
+    if (textInput.length === 0 && props.selectedOptions.length > 0) {
+      props.setSelectedOptions(props.selectedOptions.slice(0, -1));
+    }
+  };
+
+  const handleEnter = () => {
+    if (textInput.length === 0) {
+      return;
+    }
+    if (matchingOptions.length > 0) {
+      addOptionToSelected(matchingOptions[selectedSuggestionIndex]);
+    } else if (props.allowAddNew && addNewOption) {
+      addNewOptionAndSelect();
+    }
+  };
+
   const matchingOptions =
     textInput.length > 0
       ? props.options.filter(
@@ -69,62 +88,85 @@ export default function AutocompleteInput<OptionType>(props: {
         )
       : [];
 
-  const handleEnter = () => {
-    if (textInput.length === 0) {
-      return;
-    }
-    if (matchingOptions.length > 0) {
-      addOptionToSelected(matchingOptions[0]);
-    } else if (props.allowAddNew && addNewOption) {
-      addNewOptionAndSelect();
-    }
-  };
+  const scrollUp = () =>
+    setSelectedSuggestionIndex(
+      selectedSuggestionIndex === 0
+        ? matchingOptions.length - 1
+        : selectedSuggestionIndex - 1
+    );
+
+  const scrollDown = () =>
+    setSelectedSuggestionIndex(
+      selectedSuggestionIndex === matchingOptions.length - 1
+        ? 0
+        : selectedSuggestionIndex + 1
+    );
+
+  useEffect(() => {
+    setSelectedSuggestionIndex(0);
+  }, [textInput]);
 
   return (
-    <>
-      <div>
-        <div className={styles.selectedOptionsContainer}>
-          {props.selectedOptions.map((selectedOption) => (
-            <div
-              className={styles.selectedOption}
-              key={props.getOptionId(selectedOption)}
-            >
-              {props.labelFunction(selectedOption)}
-              <button
-                className={styles.removeButton}
-                onClick={() => removeOption(selectedOption)}
+    <div className={styles.dropdownContainer}>
+      <div className={styles.autocompleteInputContainer}>
+        {props.selectedOptions.length > 0 && (
+          <div className={styles.selectedOptionsContainer}>
+            {props.selectedOptions.map((selectedOption) => (
+              <div
+                className={styles.selectedOption}
+                key={props.getOptionId(selectedOption)}
               >
-                x
-              </button>
-            </div>
-          ))}
-        </div>
+                {props.labelFunction(selectedOption)}
+                <button
+                  className={styles.removeButton}
+                  onClick={() => removeOption(selectedOption)}
+                >
+                  x
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
         <input
+          className={combineClasses(styles.textInput, styles.formInput)}
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
           ref={inputRef}
-          onKeyDown={(e) => callbackOnEnter(e, handleEnter)}
+          onKeyDown={(e) => {
+            callbackOnEnter(e, handleEnter);
+            callbackOn(e, "Backspace", handleDelete, false);
+            callbackOn(e, "ArrowDown", scrollDown, true);
+            callbackOn(e, "ArrowUp", scrollUp, true);
+          }}
           autoFocus={props.autoFocus}
+          autoComplete="off"
         />
       </div>
-      <div>
+      <div className={styles.suggestionsContainer}>
         {matchingOptions.length > 0
-          ? matchingOptions.map((option) => (
-              <div
+          ? matchingOptions.map((option, i) => (
+              <button
                 key={props.getOptionId(option)}
                 onClick={() => addOptionToSelected(option)}
+                className={combineClasses(
+                  styles.suggestion,
+                  i === selectedSuggestionIndex && styles.selectedSuggestion
+                )}
               >
                 {props.labelFunction(option)}
-              </div>
+              </button>
             ))
           : props.allowAddNew &&
             addNewOption &&
             textInput.length > 0 && (
-              <div onClick={addNewOptionAndSelect}>
+              <button
+                onClick={addNewOptionAndSelect}
+                className={styles.suggestion}
+              >
                 {formatNewOption(textInput)}
-              </div>
+              </button>
             )}
       </div>
-    </>
+    </div>
   );
 }
