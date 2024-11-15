@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./AutocompleteInput.module.css";
 // import formStyles from "./FormStyling.module.css";
-import { callbackOn, callbackOnEnter, combineClasses } from "../logic/util";
+import {
+  callbackOn,
+  callbackOnEnter,
+  combineClasses,
+  joinNodes,
+} from "../logic/util";
 
 export default function AutocompleteInput<OptionType>(props: {
   options: OptionType[];
@@ -14,9 +19,11 @@ export default function AutocompleteInput<OptionType>(props: {
   addNewOptionFormatter?: (s: string) => string;
   matchFunction?: (o: string, q: string) => boolean;
   autoFocus?: boolean;
+  placeholder?: string;
 }) {
   const [textInput, setTextInput] = useState("");
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const addNewOption = props.addNewOption;
   const formatNewOption =
@@ -108,27 +115,30 @@ export default function AutocompleteInput<OptionType>(props: {
 
   return (
     <div className={styles.dropdownContainer}>
-      <div className={styles.autocompleteInputContainer}>
+      <div
+        className={combineClasses(
+          styles.autocompleteInputContainer,
+          isFocused && styles.focused
+        )}
+      >
         {props.selectedOptions.length > 0 && (
           <div className={styles.selectedOptionsContainer}>
-            {props.selectedOptions.map((selectedOption) => (
-              <div
-                className={styles.selectedOption}
-                key={props.getOptionId(selectedOption)}
-              >
-                {props.labelFunction(selectedOption)}
+            {joinNodes(
+              props.selectedOptions.map((selectedOption) => (
                 <button
-                  className={styles.removeButton}
+                  className={styles.selectedOption}
+                  key={props.getOptionId(selectedOption)}
                   onClick={() => removeOption(selectedOption)}
                 >
-                  x
+                  {props.labelFunction(selectedOption)}
                 </button>
-              </div>
-            ))}
+              )),
+              <div className={styles.interTagSpace} />
+            )}
           </div>
         )}
         <input
-          className={combineClasses(styles.textInput, styles.formInput)}
+          className={styles.textInput}
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
           ref={inputRef}
@@ -139,7 +149,10 @@ export default function AutocompleteInput<OptionType>(props: {
             callbackOn(e, "ArrowUp", scrollUp, true);
           }}
           autoFocus={props.autoFocus}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           autoComplete="off"
+          placeholder={props.placeholder}
         />
       </div>
       <div className={styles.suggestionsContainer}>
@@ -161,7 +174,10 @@ export default function AutocompleteInput<OptionType>(props: {
             textInput.length > 0 && (
               <button
                 onClick={addNewOptionAndSelect}
-                className={styles.suggestion}
+                className={combineClasses(
+                  styles.suggestion,
+                  styles.selectedSuggestion
+                )}
               >
                 {formatNewOption(textInput)}
               </button>

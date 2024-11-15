@@ -1,0 +1,100 @@
+.formPage {
+  font-size: 16pt;
+  padding-left: 15%;
+  padding-top: 80px;
+  padding-right: 5px;
+}
+
+.formContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.formLabelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+}
+
+.title {
+  font-size: 20pt;
+  font-family: "Noto Serif Basic";
+  font-weight: bold;
+  font-style: italic;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+.line {
+  flex-grow: 1;
+  border-top: 1px dashed gray;
+  margin-right: 20px;
+  margin-left: 20px;
+  height: 0px;
+}
+
+.formInput {
+  font-size: inherit;
+  font-family: inherit;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  padding-left: 10px;
+}
+
+.formInput:focus {
+  outline: 2px solid var(--theme-blue);
+}
+
+.formInput.invalid {
+  outline: 2px solid red;
+}
+
+.formInput.invalid:focus {
+  outline: auto;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.selector {
+  font-size: inherit;
+  font-family: inherit;
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.selector:focus {
+  outline: 2px solid var(--theme-blue);
+}
+
+.timeUnitSelector {
+  margin-left: 5px;
+}
+
+.textArea {
+  width: 100%;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 5px;
+  padding-left: 10px;
+  border: none;
+  border-radius: 5px;
+  resize: none;
+}
+
+.textArea:focus {
+  outline: 2px solid var(--theme-blue);
+}
+
+.submitButton {
+  display: inline-block;
+  width: min-content;
+  text-wrap: nowrap;
+  margin-top: 30px;
+}

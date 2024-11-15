@@ -1,6 +1,8 @@
 html {
   --theme-black: rgb(36, 37, 40);
   --theme-light-black: rgb(63, 64, 68);
+  --theme-light-gray: rgb(237, 238, 243);
+  --theme-blue: rgb(79, 137, 208);
 }
 
 body {

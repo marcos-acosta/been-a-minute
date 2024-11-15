@@ -1,9 +1,11 @@
 import { useState } from "react";
 import styles from "./AddFriendForm.module.css";
+import mainStyles from "./MainPage.module.css";
 import { triplit } from "../../triplit/client";
 import { Tag, TagBasic, TimeUnit } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
-import { callbackOnEscape } from "../logic/util";
+import { combineClasses } from "../logic/util";
+import { PersonIcon } from "@radix-ui/react-icons";
 
 interface AddFriendFormProps {
   onSubmit: () => void;
@@ -64,85 +66,153 @@ export default function AddFriendForm(props: AddFriendFormProps) {
   };
 
   return (
-    <div className={styles.formContainer}>
+    <div className={styles.formPage}>
+      <div className={styles.title}>
+        {fullName.length > 0 ? fullName : "A new friend!"}
+      </div>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">What's their name?</label>
-          <input
-            className={styles.shortTextInput}
-            id="name"
-            onChange={(e) => setFullName(e.target.value)}
-            value={fullName}
-            autoFocus
-            autoComplete="off"
-          />
-        </div>
-        <div>
-          <label htmlFor="local">Are they local?</label>
-          <input
-            type="checkbox"
-            checked={isLocal}
-            onChange={(e) => setIsLocal(e.target.checked)}
-          />
-        </div>
-        <div>
-          <label htmlFor="keep-in-touch">
-            Do you want to keep in touch?
+        <div className={styles.formContainer}>
+          <div className={styles.formLabelContainer}>
+            <label className={styles.formLabel} htmlFor="name">
+              what's their name?
+            </label>
+            <div className={styles.line} />
+          </div>
+          <div className={styles.inputContainer}>
+            <input
+              className={combineClasses(
+                styles.formInput,
+                fullName.length === 0 && styles.invalid
+              )}
+              id="name"
+              onChange={(e) => setFullName(e.target.value)}
+              value={fullName}
+              autoFocus
+              autoComplete="off"
+            />
+          </div>
+          <div className={styles.formLabelContainer}>
+            <div className={styles.labelContainer}>
+              <label className={styles.formLabel} htmlFor="local">
+                are they local?
+              </label>
+            </div>
+            <div className={styles.line} />
+          </div>
+          <div className={styles.inputContainer}>
+            <input
+              type="checkbox"
+              checked={isLocal}
+              onChange={(e) => setIsLocal(e.target.checked)}
+            />
+          </div>
+          <div className={styles.formLabelContainer}>
+            <div className={styles.labelContainer}>
+              <label className={styles.formLabel} htmlFor="keep-in-touch">
+                do you want to keep in touch?
+              </label>
+            </div>
+            <div className={styles.line} />
+          </div>
+          <div className={styles.inputContainer}>
             <input
               type="checkbox"
               checked={keepInTouch}
               onChange={(e) => setKeepInTouch(e.target.checked)}
             />
-          </label>
-        </div>
-        {keepInTouch && (
-          <div>
-            <label htmlFor="time-amount">
-              What's the longest you'd like to go without seeing them?
-            </label>
-            <input
-              type="number"
-              id="time-amount"
-              value={maxTimeAmount}
-              onChange={(e) =>
-                !isNaN(+e.target.value) &&
-                setMaxTimeAmount(parseInt(e.target.value))
-              }
-              autoComplete="off"
-            />
-            <select
-              value={maxTimeUnit}
-              onChange={(e) => setMaxTimeUnit(e.target.value as TimeUnit)}
-            >
-              <option value="day">{considerPlural("day")}</option>
-              <option value="week">{considerPlural("week")}</option>
-              <option value="month">{considerPlural("month")}</option>
-              <option value="year">{considerPlural("year")}</option>
-            </select>
           </div>
-        )}
-        <div>
-          <label htmlFor="note">What do you want to remember about them?</label>
-          <input
-            id="note"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            autoComplete="off"
-          />
+          {keepInTouch && (
+            <>
+              <div className={styles.formLabelContainer}>
+                <div className={styles.labelContainer}>
+                  <label className={styles.formLabel} htmlFor="time-amount">
+                    what's the longest you'd like to go between hangs?
+                  </label>
+                </div>
+                <div className={styles.line} />
+              </div>
+              <div className={styles.inputContainer}>
+                <input
+                  type="number"
+                  id="time-amount"
+                  value={maxTimeAmount}
+                  onChange={(e) =>
+                    !isNaN(+e.target.value) &&
+                    setMaxTimeAmount(parseInt(e.target.value))
+                  }
+                  autoComplete="off"
+                  size={2}
+                  className={combineClasses(
+                    styles.formInput,
+                    maxTimeAmount <= 0 && styles.invalid
+                  )}
+                />
+                <select
+                  value={maxTimeUnit}
+                  className={combineClasses(
+                    styles.selector,
+                    styles.timeUnitSelector
+                  )}
+                  onChange={(e) => setMaxTimeUnit(e.target.value as TimeUnit)}
+                >
+                  <option value="day">{considerPlural("day")}</option>
+                  <option value="week">{considerPlural("week")}</option>
+                  <option value="month">{considerPlural("month")}</option>
+                  <option value="year">{considerPlural("year")}</option>
+                </select>
+              </div>
+            </>
+          )}
+          <div className={styles.formLabelContainer}>
+            <div className={styles.labelContainer}>
+              <label className={styles.formLabel} htmlFor="note">
+                how do you know them?
+              </label>
+            </div>
+            <div className={styles.line} />
+          </div>
+          <div className={styles.inputContainer}>
+            <input
+              id="note"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              autoComplete="off"
+              className={styles.formInput}
+              placeholder="add a note"
+            />
+          </div>
+          <div className={styles.formLabelContainer}>
+            <div className={styles.labelContainer}>
+              <label className={styles.formLabel} htmlFor="tag-input">
+                what do you associate them with?
+              </label>
+            </div>
+            <div className={styles.line} />
+          </div>
+          <div className={styles.inputContainer}>
+            <AutocompleteInput
+              options={props.tags as TagBasic[]}
+              selectedOptions={selectedTags as TagBasic[]}
+              setSelectedOptions={setSelectedTags as (t: TagBasic[]) => void}
+              labelFunction={(tag) => tag.name}
+              getOptionId={(tag) => tag.id}
+              addNewOptionFormatter={(s: string) => `add new tag: ${s}`}
+              allowAddNew
+              addNewOption={addTagToDatabase}
+              placeholder="add a tag"
+            />
+          </div>
+          <div />
+          <button
+            type="submit"
+            className={combineClasses(
+              mainStyles.themedButton,
+              styles.submitButton
+            )}
+          >
+            <PersonIcon className={mainStyles.withinButtonIcon} /> add friend
+          </button>
         </div>
-        <div>
-          <label htmlFor="tag-input">Tags:</label>
-          <AutocompleteInput
-            options={props.tags as TagBasic[]}
-            selectedOptions={selectedTags as TagBasic[]}
-            setSelectedOptions={setSelectedTags as (t: TagBasic[]) => void}
-            labelFunction={(tag) => tag.name}
-            getOptionId={(tag) => tag.id}
-            allowAddNew
-            addNewOption={addTagToDatabase}
-          />
-        </div>
-        <button type="submit">Add</button>
       </form>
     </div>
   );
