@@ -26,7 +26,6 @@
 .themedButton {
   padding: 10px;
   background-color: var(--theme-light-black);
-  box-shadow: -1px 1px 0px 0px var(--theme-light-black);
   color: white;
   border-radius: 10px;
   display: inline-flex;
@@ -53,7 +52,6 @@
 .themedButton:hover,
 .themedButton:focus {
   background-color: var(--theme-black);
-  box-shadow: -1px 1px 0px 0px var(--theme-black);
 }
 
 .searchInput {
@@ -61,9 +59,8 @@
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  border: 1px solid var(--theme-light-black);
+  border: 1px dashed var(--theme-light-black);
   border-radius: 10px;
-  box-shadow: -1px 1px 0px 0px var(--theme-light-black);
   padding-top: 5px;
   padding-bottom: 5px;
 }

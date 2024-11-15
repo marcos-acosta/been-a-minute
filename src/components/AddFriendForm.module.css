@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px dotted var(--theme-light-black);
+  border: 1px solid var(--theme-light-black);
   border-radius: 5px;
   padding: 5px;
   padding-left: 10px;
@@ -57,7 +57,7 @@
 .formInput {
   font-size: inherit;
   font-family: inherit;
-  border: 1px gray dotted;
+  border: 1px gray dashed;
   border-radius: 5px;
   padding: 5px;
   padding-left: 10px;
@@ -68,10 +68,12 @@
 
 .formInput:focus {
   outline: 2px solid var(--theme-blue);
+  border: 1px white dashed;
 }
 
 .formInput.invalid {
   outline: 2px solid red;
+  border: 1px white dashed;
 }
 
 .formInput.invalid:focus {
@@ -89,11 +91,15 @@
   font-size: inherit;
   font-family: inherit;
   background-color: white;
-  border: 1px gray dotted;
+  border: 1px gray dashed;
   height: 70%;
   border-radius: 5px;
   padding-left: 10px;
   padding-right: 5px;
+}
+
+.selector:focus {
+  border: 1px white dashed;
 }
 
 .inputHeight {
@@ -115,13 +121,14 @@
   font-family: inherit;
   padding: 5px;
   padding-left: 10px;
-  border: 1px gray dotted;
+  border: 1px gray dashed;
   border-radius: 5px;
   resize: none;
 }
 
 .textArea:focus {
   outline: 2px solid var(--theme-blue);
+  border: 1px solid white;
 }
 
 .submitButton {

@@ -84,11 +84,9 @@ export default function AddFriendForm(props: AddFriendFormProps) {
 
   return (
     <div className={styles.formPage}>
-      <button className={styles.backButton}>
+      <button className={styles.backButton} onClick={props.onSubmit}>
         <ArrowLeftIcon />
-        <span className={styles.backButtonText} onClick={props.onSubmit}>
-          back
-        </span>
+        <span className={styles.backButtonText}>back</span>
       </button>
       <div className={styles.title}>
         {fullName.length > 0 ? fullName : "A new friend!"}
