@@ -9,8 +9,8 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 25px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 50px;
+  padding-bottom: 20px;
   padding-left: 15%;
   padding-right: 15%;
 }
@@ -25,8 +25,8 @@
 
 .themedButton {
   padding: 10px;
-  background-color: var(--theme-black);
-  box-shadow: -1px 1px 0px 0px var(--theme-black);
+  background-color: var(--theme-light-black);
+  box-shadow: -1px 1px 0px 0px var(--theme-light-black);
   color: white;
   border-radius: 10px;
   display: inline-flex;
@@ -52,8 +52,8 @@
 
 .themedButton:hover,
 .themedButton:focus {
-  background-color: var(--theme-light-black);
-  box-shadow: -1px 1px 0px 0px var(--theme-light-black);
+  background-color: var(--theme-black);
+  box-shadow: -1px 1px 0px 0px var(--theme-black);
 }
 
 .searchInput {
@@ -61,16 +61,16 @@
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  border: 1px solid gray;
+  border: 1px solid var(--theme-light-black);
   border-radius: 10px;
-  box-shadow: -1px 1px 0px 0px gray;
+  box-shadow: -1px 1px 0px 0px var(--theme-light-black);
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
 .searchIconContainer {
   margin-right: 12px;
-  color: gray;
+  color: var(--theme-light-black);
   display: flex;
   flex-direction: row;
   justify-content: center;

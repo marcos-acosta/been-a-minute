@@ -59,5 +59,15 @@ export const andStopPropagate = (
 };
 
 export const combineClasses = (
-  ...classNames: (string | undefined | null | false)[]
+  ...classNames: (string | undefined | null | false | number)[]
 ) => classNames.filter(Boolean).join(" ");
+
+export const mod = (a: number, n: number) => ((a % n) + n) % n;
+
+export const tryToParseInt = (s: string) => {
+  try {
+    return parseInt(s);
+  } catch {
+    return undefined;
+  }
+};

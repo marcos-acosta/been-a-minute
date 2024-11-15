@@ -1,13 +1,31 @@
 .formPage {
   font-size: 16pt;
-  padding-left: 15%;
-  padding-top: 80px;
+  padding-left: 10%;
+  padding-top: 40px;
   padding-right: 5px;
+}
+
+.backButton {
+  cursor: pointer;
+  background-color: white;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px dotted var(--theme-light-black);
+  border-radius: 5px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.backButtonText {
+  margin-left: 5px;
 }
 
 .formContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr;
 }
 
 .formLabelContainer {
@@ -15,6 +33,7 @@
   flex-direction: row;
   align-items: center;
   height: 60px;
+  min-width: 500px;
 }
 
 .title {
@@ -22,8 +41,9 @@
   font-family: "Noto Serif Basic";
   font-weight: bold;
   font-style: italic;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   font-size: 2em;
+  margin-top: 40px;
 }
 
 .line {
@@ -37,10 +57,13 @@
 .formInput {
   font-size: inherit;
   font-family: inherit;
-  border: none;
+  border: 1px gray dotted;
   border-radius: 5px;
   padding: 5px;
   padding-left: 10px;
+  height: 70%;
+  box-sizing: border-box;
+  width: 300px;
 }
 
 .formInput:focus {
@@ -59,14 +82,22 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
 }
 
 .selector {
   font-size: inherit;
   font-family: inherit;
   background-color: white;
-  border: none;
+  border: 1px gray dotted;
+  height: 70%;
   border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 5px;
+}
+
+.inputHeight {
+  height: 70%;
 }
 
 .selector:focus {
@@ -78,12 +109,13 @@
 }
 
 .textArea {
-  width: 100%;
+  width: 400px;
+  box-sizing: border-box;
   font-size: inherit;
   font-family: inherit;
   padding: 5px;
   padding-left: 10px;
-  border: none;
+  border: 1px gray dotted;
   border-radius: 5px;
   resize: none;
 }
@@ -97,4 +129,10 @@
   width: min-content;
   text-wrap: nowrap;
   margin-top: 30px;
+}
+
+.submitButton:disabled {
+  background-color: var(--theme-light-gray);
+  color: gray;
+  box-shadow: none;
 }

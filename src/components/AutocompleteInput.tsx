@@ -18,8 +18,10 @@ export default function AutocompleteInput<OptionType>(props: {
   addNewOption?: (s: string) => Promise<OptionType | undefined>;
   addNewOptionFormatter?: (s: string) => string;
   matchFunction?: (o: string, q: string) => boolean;
+  optionStylingFunction?: (o: OptionType) => object;
   autoFocus?: boolean;
   placeholder?: string;
+  inputClasses?: string[];
 }) {
   const [textInput, setTextInput] = useState("");
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
@@ -118,7 +120,8 @@ export default function AutocompleteInput<OptionType>(props: {
       <div
         className={combineClasses(
           styles.autocompleteInputContainer,
-          isFocused && styles.focused
+          isFocused && styles.focused,
+          ...(props.inputClasses ? props.inputClasses : [])
         )}
       >
         {props.selectedOptions.length > 0 && (
@@ -129,6 +132,10 @@ export default function AutocompleteInput<OptionType>(props: {
                   className={styles.selectedOption}
                   key={props.getOptionId(selectedOption)}
                   onClick={() => removeOption(selectedOption)}
+                  style={
+                    props.optionStylingFunction &&
+                    props.optionStylingFunction(selectedOption)
+                  }
                 >
                   {props.labelFunction(selectedOption)}
                 </button>

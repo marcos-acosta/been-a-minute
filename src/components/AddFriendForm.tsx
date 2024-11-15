@@ -4,8 +4,9 @@ import mainStyles from "./MainPage.module.css";
 import { triplit } from "../../triplit/client";
 import { Tag, TagBasic, TimeUnit } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
-import { combineClasses } from "../logic/util";
-import { PersonIcon } from "@radix-ui/react-icons";
+import { combineClasses, tryToParseInt } from "../logic/util";
+import { ArrowLeftIcon, PersonIcon } from "@radix-ui/react-icons";
+import { textToColor } from "../logic/rendering";
 
 interface AddFriendFormProps {
   onSubmit: () => void;
@@ -15,11 +16,16 @@ interface AddFriendFormProps {
 export default function AddFriendForm(props: AddFriendFormProps) {
   const [fullName, setFullName] = useState("");
   const [isLocal, setIsLocal] = useState(true);
-  const [maxTimeAmount, setMaxTimeAmount] = useState(1);
+  const [maxTimeAmount, setMaxTimeAmount] = useState("1");
   const [keepInTouch, setKeepInTouch] = useState(true);
   const [maxTimeUnit, setMaxTimeUnit] = useState("month" as TimeUnit);
   const [selectedTags, setSelectedTags] = useState([] as Tag[]);
   const [note, setNote] = useState("");
+
+  const parsedMaxTimeAmount = tryToParseInt(maxTimeAmount);
+
+  const canSubmit =
+    parsedMaxTimeAmount && parsedMaxTimeAmount > 0 && fullName.length > 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +37,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
       long_distance: !isLocal,
       max_time_between_contact: keepInTouch
         ? {
-            amount: maxTimeAmount,
+            amount: parseInt(maxTimeAmount),
             unit: maxTimeUnit,
           }
         : undefined,
@@ -50,7 +56,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
   };
 
   const considerPlural = (str: string) =>
-    maxTimeAmount !== 1 ? `${str}s` : str;
+    parsedMaxTimeAmount === 1 ? str : `${str}s`;
 
   const splitFirstAndLastName = (): [string, string | undefined] => {
     const fullNameTrimmed = fullName.trim();
@@ -65,8 +71,25 @@ export default function AddFriendForm(props: AddFriendFormProps) {
     }
   };
 
+  const getYesNoCheckbox = (value: boolean, setter: (b: boolean) => void) => (
+    <select
+      value={value ? "yes" : "no"}
+      className={combineClasses(styles.selector)}
+      onChange={(e) => setter(e.target.value === "yes")}
+    >
+      <option value="yes">yes</option>
+      <option value="no">no</option>
+    </select>
+  );
+
   return (
     <div className={styles.formPage}>
+      <button className={styles.backButton}>
+        <ArrowLeftIcon />
+        <span className={styles.backButtonText} onClick={props.onSubmit}>
+          back
+        </span>
+      </button>
       <div className={styles.title}>
         {fullName.length > 0 ? fullName : "A new friend!"}
       </div>
@@ -100,11 +123,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             <div className={styles.line} />
           </div>
           <div className={styles.inputContainer}>
-            <input
-              type="checkbox"
-              checked={isLocal}
-              onChange={(e) => setIsLocal(e.target.checked)}
-            />
+            {getYesNoCheckbox(isLocal, setIsLocal)}
           </div>
           <div className={styles.formLabelContainer}>
             <div className={styles.labelContainer}>
@@ -115,11 +134,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             <div className={styles.line} />
           </div>
           <div className={styles.inputContainer}>
-            <input
-              type="checkbox"
-              checked={keepInTouch}
-              onChange={(e) => setKeepInTouch(e.target.checked)}
-            />
+            {getYesNoCheckbox(keepInTouch, setKeepInTouch)}
           </div>
           {keepInTouch && (
             <>
@@ -136,15 +151,13 @@ export default function AddFriendForm(props: AddFriendFormProps) {
                   type="number"
                   id="time-amount"
                   value={maxTimeAmount}
-                  onChange={(e) =>
-                    !isNaN(+e.target.value) &&
-                    setMaxTimeAmount(parseInt(e.target.value))
-                  }
+                  onChange={(e) => setMaxTimeAmount(e.target.value)}
                   autoComplete="off"
                   size={2}
                   className={combineClasses(
                     styles.formInput,
-                    maxTimeAmount <= 0 && styles.invalid
+                    !(parsedMaxTimeAmount && parsedMaxTimeAmount > 0) &&
+                      styles.invalid
                   )}
                 />
                 <select
@@ -172,13 +185,14 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             <div className={styles.line} />
           </div>
           <div className={styles.inputContainer}>
-            <input
+            <textarea
               id="note"
               value={note}
               onChange={(e) => setNote(e.target.value)}
               autoComplete="off"
-              className={styles.formInput}
+              className={styles.textArea}
               placeholder="add a note"
+              rows={3}
             />
           </div>
           <div className={styles.formLabelContainer}>
@@ -200,6 +214,10 @@ export default function AddFriendForm(props: AddFriendFormProps) {
               allowAddNew
               addNewOption={addTagToDatabase}
               placeholder="add a tag"
+              optionStylingFunction={(tag: TagBasic) => ({
+                backgroundColor: textToColor(tag.name),
+              })}
+              inputClasses={[styles.inputHeight]}
             />
           </div>
           <div />
@@ -209,6 +227,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
               mainStyles.themedButton,
               styles.submitButton
             )}
+            disabled={!canSubmit}
           >
             <PersonIcon className={mainStyles.withinButtonIcon} /> add friend
           </button>

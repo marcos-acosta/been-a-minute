@@ -4,6 +4,8 @@
   align-items: center;
   height: 100%;
   border-radius: 5px;
+  text-wrap: nowrap;
+  border: 1px gray dotted;
 }
 
 .autocompleteInputContainer.focused {
@@ -56,6 +58,7 @@
   flex-direction: column;
   position: relative;
   height: min-content;
+  width: min-content;
 }
 
 .suggestion {

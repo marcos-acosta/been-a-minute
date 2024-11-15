@@ -4,6 +4,8 @@ import {
   differenceInHours,
   formatDistanceToNow,
 } from "date-fns";
+import { simpleHash } from "./logic";
+import { mod } from "./util";
 
 const NUMBER_WORDS = [
   "one",
@@ -17,6 +19,14 @@ const NUMBER_WORDS = [
   "nine",
   "ten",
 ];
+
+export const COLORS = {
+  yellow: "#FAE6C5",
+  tan: "#F0DBC6",
+  light_green: "#C7DFCA",
+  purple: "#D1C1D8",
+  red: "#F8BFBE",
+};
 
 export function formatHangFrequency({
   amount,
@@ -44,3 +54,9 @@ export function formatTimeSinceLastHang(lastHang: Date) {
     return `${formatDistanceToNow(lastHang)} ago`;
   }
 }
+
+export const textToColor = (text: string) => {
+  return Object.values(COLORS)[
+    mod(simpleHash(text), Object.values(COLORS).length)
+  ];
+};
