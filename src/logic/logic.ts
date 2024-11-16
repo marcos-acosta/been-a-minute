@@ -1,7 +1,7 @@
 import { differenceInCalendarDays } from "date-fns";
-import { Friend, HangBasic, TimeUnit } from "../../triplit/schema";
+import { Friend, FriendBasic, HangBasic, TimeUnit } from "../../triplit/schema";
 
-export const getFullName = (friend: Friend) =>
+export const getFullName = (friend: FriendBasic) =>
   friend.first_name + (friend.last_name ? ` ${friend.last_name}` : "");
 
 const UNIT_TO_DAYS = {

@@ -1,3 +1,141 @@
-/* .formInput {
+.formPage {
+  font-size: 16pt;
+  padding-left: 10%;
+  padding-top: 40px;
+  padding-right: 5px;
+}
+
+.backButton {
+  cursor: pointer;
+  background-color: white;
   border: none;
-} */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid var(--theme-light-black);
+  border-radius: 5px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.backButtonText {
+  margin-left: 5px;
+}
+
+.formContainer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.formLabelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+  min-width: 500px;
+}
+
+.title {
+  font-size: 20pt;
+  font-family: "Noto Serif Basic";
+  font-weight: bold;
+  font-style: italic;
+  margin-bottom: 20px;
+  font-size: 2em;
+  margin-top: 40px;
+}
+
+.line {
+  flex-grow: 1;
+  border-top: 1px dashed gray;
+  margin-right: 20px;
+  margin-left: 20px;
+  height: 0px;
+}
+
+.formInput {
+  font-size: inherit;
+  font-family: inherit;
+  border: 1px gray dashed;
+  border-radius: 5px;
+  padding: 5px;
+  padding-left: 10px;
+  height: 70%;
+  box-sizing: border-box;
+  width: 300px;
+}
+
+.formInput:focus {
+  outline: 2px solid var(--theme-blue);
+  border: 1px white dashed;
+}
+
+.formInput.invalid {
+  outline: 2px solid red;
+  border: 1px white dashed;
+}
+
+.formInput.invalid:focus {
+  outline: auto;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+}
+
+.selector {
+  font-size: inherit;
+  font-family: inherit;
+  background-color: white;
+  border: 1px gray dashed;
+  height: 70%;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 5px;
+}
+
+.selector:focus {
+  border: 1px white dashed;
+}
+
+.inputHeight {
+  height: 70%;
+}
+
+.selector:focus {
+  outline: 2px solid var(--theme-blue);
+}
+
+.textArea {
+  width: 400px;
+  box-sizing: border-box;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 5px;
+  padding-left: 10px;
+  border: 1px gray dashed;
+  border-radius: 5px;
+  resize: none;
+}
+
+.textArea:focus {
+  outline: 2px solid var(--theme-blue);
+  border: 1px solid white;
+}
+
+.submitButton {
+  display: inline-flex;
+  width: min-content;
+  text-wrap: nowrap;
+  margin-top: 30px;
+}
+
+.submitButton:disabled {
+  background-color: var(--theme-light-gray);
+  color: gray;
+  box-shadow: none;
+}

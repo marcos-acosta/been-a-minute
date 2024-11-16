@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./AddFriendForm.module.css";
+import formStyles from "./FormStyling.module.css";
 import mainStyles from "./MainPage.module.css";
 import { triplit } from "../../triplit/client";
 import { Tag, TagBasic, TimeUnit } from "../../triplit/schema";
@@ -74,7 +75,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
   const getYesNoCheckbox = (value: boolean, setter: (b: boolean) => void) => (
     <select
       value={value ? "yes" : "no"}
-      className={combineClasses(styles.selector)}
+      className={combineClasses(formStyles.selector)}
       onChange={(e) => setter(e.target.value === "yes")}
     >
       <option value="yes">yes</option>
@@ -83,27 +84,27 @@ export default function AddFriendForm(props: AddFriendFormProps) {
   );
 
   return (
-    <div className={styles.formPage}>
-      <button className={styles.backButton} onClick={props.onSubmit}>
+    <div className={formStyles.formPage}>
+      <button className={formStyles.backButton} onClick={props.onSubmit}>
         <ArrowLeftIcon />
-        <span className={styles.backButtonText}>back</span>
+        <span className={formStyles.backButtonText}>back</span>
       </button>
-      <div className={styles.title}>
+      <div className={formStyles.title}>
         {fullName.length > 0 ? fullName : "A new friend!"}
       </div>
       <form onSubmit={handleSubmit}>
-        <div className={styles.formContainer}>
-          <div className={styles.formLabelContainer}>
-            <label className={styles.formLabel} htmlFor="name">
+        <div className={formStyles.formContainer}>
+          <div className={formStyles.formLabelContainer}>
+            <label className={formStyles.formLabel} htmlFor="name">
               what's their name?
             </label>
-            <div className={styles.line} />
+            <div className={formStyles.line} />
           </div>
-          <div className={styles.inputContainer}>
+          <div className={formStyles.inputContainer}>
             <input
               className={combineClasses(
-                styles.formInput,
-                fullName.length === 0 && styles.invalid
+                formStyles.formInput,
+                fullName.length === 0 && formStyles.invalid
               )}
               id="name"
               onChange={(e) => setFullName(e.target.value)}
@@ -112,39 +113,39 @@ export default function AddFriendForm(props: AddFriendFormProps) {
               autoComplete="off"
             />
           </div>
-          <div className={styles.formLabelContainer}>
-            <div className={styles.labelContainer}>
-              <label className={styles.formLabel} htmlFor="local">
+          <div className={formStyles.formLabelContainer}>
+            <div className={formStyles.labelContainer}>
+              <label className={formStyles.formLabel} htmlFor="local">
                 are they local?
               </label>
             </div>
-            <div className={styles.line} />
+            <div className={formStyles.line} />
           </div>
-          <div className={styles.inputContainer}>
+          <div className={formStyles.inputContainer}>
             {getYesNoCheckbox(isLocal, setIsLocal)}
           </div>
-          <div className={styles.formLabelContainer}>
-            <div className={styles.labelContainer}>
-              <label className={styles.formLabel} htmlFor="keep-in-touch">
+          <div className={formStyles.formLabelContainer}>
+            <div className={formStyles.labelContainer}>
+              <label className={formStyles.formLabel} htmlFor="keep-in-touch">
                 do you want to keep in touch?
               </label>
             </div>
-            <div className={styles.line} />
+            <div className={formStyles.line} />
           </div>
-          <div className={styles.inputContainer}>
+          <div className={formStyles.inputContainer}>
             {getYesNoCheckbox(keepInTouch, setKeepInTouch)}
           </div>
           {keepInTouch && (
             <>
-              <div className={styles.formLabelContainer}>
-                <div className={styles.labelContainer}>
-                  <label className={styles.formLabel} htmlFor="time-amount">
+              <div className={formStyles.formLabelContainer}>
+                <div className={formStyles.labelContainer}>
+                  <label className={formStyles.formLabel} htmlFor="time-amount">
                     what's the longest you'd like to go between hangs?
                   </label>
                 </div>
-                <div className={styles.line} />
+                <div className={formStyles.line} />
               </div>
-              <div className={styles.inputContainer}>
+              <div className={formStyles.inputContainer}>
                 <input
                   type="number"
                   id="time-amount"
@@ -153,15 +154,15 @@ export default function AddFriendForm(props: AddFriendFormProps) {
                   autoComplete="off"
                   size={2}
                   className={combineClasses(
-                    styles.formInput,
+                    formStyles.formInput,
                     !(parsedMaxTimeAmount && parsedMaxTimeAmount > 0) &&
-                      styles.invalid
+                      formStyles.invalid
                   )}
                 />
                 <select
                   value={maxTimeUnit}
                   className={combineClasses(
-                    styles.selector,
+                    formStyles.selector,
                     styles.timeUnitSelector
                   )}
                   onChange={(e) => setMaxTimeUnit(e.target.value as TimeUnit)}
@@ -174,34 +175,34 @@ export default function AddFriendForm(props: AddFriendFormProps) {
               </div>
             </>
           )}
-          <div className={styles.formLabelContainer}>
-            <div className={styles.labelContainer}>
-              <label className={styles.formLabel} htmlFor="note">
+          <div className={formStyles.formLabelContainer}>
+            <div className={formStyles.labelContainer}>
+              <label className={formStyles.formLabel} htmlFor="note">
                 how do you know them?
               </label>
             </div>
-            <div className={styles.line} />
+            <div className={formStyles.line} />
           </div>
-          <div className={styles.inputContainer}>
+          <div className={formStyles.inputContainer}>
             <textarea
               id="note"
               value={note}
               onChange={(e) => setNote(e.target.value)}
               autoComplete="off"
-              className={styles.textArea}
+              className={formStyles.textArea}
               placeholder="add a note"
               rows={3}
             />
           </div>
-          <div className={styles.formLabelContainer}>
-            <div className={styles.labelContainer}>
-              <label className={styles.formLabel} htmlFor="tag-input">
+          <div className={formStyles.formLabelContainer}>
+            <div className={formStyles.labelContainer}>
+              <label className={formStyles.formLabel} htmlFor="tag-input">
                 what do you associate them with?
               </label>
             </div>
-            <div className={styles.line} />
+            <div className={formStyles.line} />
           </div>
-          <div className={styles.inputContainer}>
+          <div className={formStyles.inputContainer}>
             <AutocompleteInput
               options={props.tags as TagBasic[]}
               selectedOptions={selectedTags as TagBasic[]}
@@ -215,7 +216,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
               optionStylingFunction={(tag: TagBasic) => ({
                 backgroundColor: textToColor(tag.name),
               })}
-              inputClasses={[styles.inputHeight]}
+              inputClasses={[formStyles.inputHeight]}
             />
           </div>
           <div />
@@ -223,7 +224,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             type="submit"
             className={combineClasses(
               mainStyles.themedButton,
-              styles.submitButton
+              formStyles.submitButton
             )}
             disabled={!canSubmit}
           >
