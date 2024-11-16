@@ -220,16 +220,18 @@ export default function AddFriendForm(props: AddFriendFormProps) {
             />
           </div>
           <div />
-          <button
-            type="submit"
-            className={combineClasses(
-              mainStyles.themedButton,
-              formStyles.submitButton
-            )}
-            disabled={!canSubmit}
-          >
-            <PersonIcon className={mainStyles.withinButtonIcon} /> add friend
-          </button>
+          <div className={formStyles.submitButtonContainer}>
+            <button
+              type="submit"
+              className={combineClasses(
+                mainStyles.themedButton,
+                formStyles.submitButton
+              )}
+              disabled={!canSubmit}
+            >
+              <PersonIcon className={mainStyles.withinButtonIcon} /> add friend
+            </button>
+          </div>
         </div>
       </form>
     </div>

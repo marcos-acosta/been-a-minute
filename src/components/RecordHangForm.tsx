@@ -101,16 +101,19 @@ export default function RecordHang(props: RecordHangProps) {
             />
           </div>
           <div />
-          <button
-            type="submit"
-            className={combineClasses(
-              mainStyles.themedButton,
-              formStyles.submitButton
-            )}
-            disabled={!canSubmit}
-          >
-            <Pencil1Icon className={mainStyles.withinButtonIcon} /> record hang
-          </button>
+          <div className={formStyles.submitButtonContainer}>
+            <button
+              type="submit"
+              className={combineClasses(
+                mainStyles.themedButton,
+                formStyles.submitButton
+              )}
+              disabled={!canSubmit}
+            >
+              <Pencil1Icon className={mainStyles.withinButtonIcon} /> record
+              hang
+            </button>
+          </div>
         </div>
       </form>
     </div>

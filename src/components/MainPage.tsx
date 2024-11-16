@@ -85,34 +85,37 @@ export default function MainPage(props: MainPageProps) {
       <div className={combineClasses(styles.appContainer, "sourceSansBasic")}>
         {props.pageState === PageState.FRIEND_LIST ? (
           <>
-            <div className={styles.filterPanel}>
-              <div className={styles.addFriendButtonContainer}>
-                <button
-                  className={styles.themedButton}
-                  onClick={switchToAddFriendForm}
-                >
-                  <PersonIcon className={styles.withinButtonIcon} /> add friend
-                </button>
-              </div>
-              <div className={styles.searchIconContainer}>
-                <MagnifyingGlassIcon />
-              </div>
-              <input
-                className={styles.searchInput}
-                value={searchText}
-                placeholder="fuzzy search"
-                onChange={(e) => setSearchText(e.target.value)}
-                onKeyDown={(e) => callbackOnEscape(e, blurSearchBar)}
-                ref={searchBarRef}
-              />
-              <div className={styles.addHangButtonContainer}>
-                <button
-                  className={styles.themedButton}
-                  onClick={switchToRecordHangForm}
-                >
-                  <Pencil1Icon className={styles.withinButtonIcon} />
-                  record hang
-                </button>
+            <div className={styles.header}>
+              <div className={styles.filterPanel}>
+                <div className={styles.addFriendButtonContainer}>
+                  <button
+                    className={styles.themedButton}
+                    onClick={switchToAddFriendForm}
+                  >
+                    <PersonIcon className={styles.withinButtonIcon} /> add
+                    friend
+                  </button>
+                </div>
+                <div className={styles.searchIconContainer}>
+                  <MagnifyingGlassIcon />
+                </div>
+                <input
+                  className={styles.searchInput}
+                  value={searchText}
+                  placeholder="search"
+                  onChange={(e) => setSearchText(e.target.value)}
+                  onKeyDown={(e) => callbackOnEscape(e, blurSearchBar)}
+                  ref={searchBarRef}
+                />
+                <div className={styles.addHangButtonContainer}>
+                  <button
+                    className={styles.themedButton}
+                    onClick={switchToRecordHangForm}
+                  >
+                    <Pencil1Icon className={styles.withinButtonIcon} />
+                    record hang
+                  </button>
+                </div>
               </div>
             </div>
             <div className={styles.friendListContainer}>

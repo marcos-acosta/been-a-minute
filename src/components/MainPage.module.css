@@ -1,5 +1,13 @@
 .appContainer {
   width: 100vw;
+  font-size: 12pt;
+}
+
+.header {
+  margin-bottom: 25px;
+  padding-top: 50px;
+  padding-bottom: 20px;
+  font-size: 14pt;
 }
 
 .filterPanel {
@@ -8,11 +16,10 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-bottom: 25px;
-  padding-top: 50px;
-  padding-bottom: 20px;
   padding-left: 15%;
   padding-right: 15%;
+  height: 40px;
+  position: relative;
 }
 
 .friendListContainer {
@@ -24,7 +31,9 @@
 }
 
 .themedButton {
-  padding: 10px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
   background-color: var(--theme-light-black);
   color: white;
   border-radius: 10px;
@@ -34,6 +43,8 @@
   cursor: pointer;
   transition-property: background-color, box-shadow;
   transition-duration: 0.5s;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .withinButtonIcon {
@@ -42,11 +53,13 @@
 
 .addFriendButtonContainer {
   flex-grow: 1;
+  height: 100%;
 }
 
 .addHangButtonContainer {
   flex-grow: 1;
   text-align: right;
+  height: 100%;
 }
 
 .themedButton:hover,
@@ -61,8 +74,8 @@
   outline: none;
   border: 1px dashed var(--theme-light-black);
   border-radius: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .searchIconContainer {

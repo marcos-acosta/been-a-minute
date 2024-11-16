@@ -139,3 +139,7 @@
   color: gray;
   box-shadow: none;
 }
+
+.submitButtonContainer {
+  height: 50px;
+}
