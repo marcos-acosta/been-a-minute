@@ -72,7 +72,11 @@ export type TimeUnit = "day" | "week" | "month" | "year";
 
 export interface Friend extends FriendBasic {
   meetings: HangBasic[];
+  tags: TagBasic[];
 }
+export interface FriendToSubmit
+  extends Omit<FriendBasic, "id" | "created_at"> {}
+
 export interface Tag extends TagBasic {
   tagged_friends: FriendBasic[];
 }

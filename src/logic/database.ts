@@ -1,34 +1,18 @@
 import { triplit } from "../../triplit/client";
-import { TimeUnit } from "../../triplit/schema";
+import { Friend, FriendToSubmit } from "../../triplit/schema";
 
-export const addFriend = async (
-  firstName: string,
-  isLocal: boolean,
-  tagIds: string[],
-  keepInTouch: boolean,
-  lastName?: string,
-  note?: string,
-  timeBetweenContactAmount?: number,
-  timeBetweenContactUnit?: TimeUnit
-) => {
-  const addHangFrequency =
-    keepInTouch &&
-    timeBetweenContactAmount !== undefined &&
-    timeBetweenContactUnit;
-  const inserted = await triplit.insert("friends", {
-    first_name: firstName,
-    last_name: lastName,
-    relation: note,
-    long_distance: !isLocal,
-    max_time_between_contact: addHangFrequency
-      ? {
-          amount: timeBetweenContactAmount,
-          unit: timeBetweenContactUnit,
-        }
-      : undefined,
-    tag_ids: new Set(tagIds),
-  });
+export const addFriend = async (friend: FriendToSubmit) => {
+  const inserted = await triplit.insert("friends", friend);
   return inserted;
+};
+
+export const updateFriend = async (
+  friendId: string,
+  newFriend: Partial<Friend>
+) => {
+  return await triplit.update("friends", friendId, async (friend) => {
+    Object.assign(friend, newFriend);
+  });
 };
 
 export const removeFriend = async (friendId: string) => {

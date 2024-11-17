@@ -10,7 +10,13 @@ import { combineClasses, joinNodes } from "../logic/util";
 import { useState } from "react";
 import { removeFriend } from "../logic/database";
 
-export default function FriendCard({ friend }: { friend: Friend }) {
+export default function FriendCard({
+  friend,
+  startEditingFn,
+}: {
+  friend: Friend;
+  startEditingFn: () => void;
+}) {
   const [isHovering, setIsHovering] = useState(false);
   const lastHangDate = getLastHangDate(friend);
   const daysOverdue = getDaysOverdue(friend);
@@ -38,7 +44,7 @@ export default function FriendCard({ friend }: { friend: Friend }) {
             {joinNodes(
               [
                 <button className={styles.actionButton}>
-                  <Pencil1Icon />
+                  <Pencil1Icon onClick={startEditingFn} />
                 </button>,
                 <button className={styles.actionButton}>
                   <TrashIcon onClick={() => handleDelete(friend.id)} />

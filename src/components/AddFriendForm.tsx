@@ -2,26 +2,50 @@ import { useState } from "react";
 import styles from "./AddFriendForm.module.css";
 import formStyles from "./FormStyling.module.css";
 import mainStyles from "./MainPage.module.css";
-import { triplit } from "../../triplit/client";
-import { Tag, TagBasic, TimeUnit } from "../../triplit/schema";
+import {
+  Friend,
+  FriendToSubmit,
+  TagBasic,
+  TimeUnit,
+} from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
 import { combineClasses, tryToParseInt } from "../logic/util";
 import { ArrowLeftIcon, PersonIcon } from "@radix-ui/react-icons";
 import { textToColor } from "../logic/rendering";
-import { addFriend, saveTag } from "../logic/database";
+import { saveTag } from "../logic/database";
+import { getFullName } from "../logic/logic";
 
 interface AddFriendFormProps {
   onSubmit: () => void;
-  tags: Tag[];
+  tags: TagBasic[];
+  submitFriendFn: (f: FriendToSubmit) => void;
+  existingFriend?: Friend;
 }
 
 export default function AddFriendForm(props: AddFriendFormProps) {
-  const [fullName, setFullName] = useState("");
-  const [isLocal, setIsLocal] = useState(true);
-  const [maxTimeAmount, setMaxTimeAmount] = useState("1");
-  const [keepInTouch, setKeepInTouch] = useState(true);
-  const [maxTimeUnit, setMaxTimeUnit] = useState("month" as TimeUnit);
-  const [selectedTags, setSelectedTags] = useState([] as Tag[]);
+  const existingFriend = props.existingFriend;
+  const [fullName, setFullName] = useState(
+    existingFriend ? getFullName(existingFriend) : ""
+  );
+  const [isLocal, setIsLocal] = useState(
+    existingFriend ? !existingFriend.long_distance : true
+  );
+  const [maxTimeAmount, setMaxTimeAmount] = useState(
+    existingFriend?.max_time_between_contact
+      ? `${existingFriend.max_time_between_contact?.amount}`
+      : "1"
+  );
+  const [maxTimeUnit, setMaxTimeUnit] = useState(
+    existingFriend?.max_time_between_contact
+      ? existingFriend.max_time_between_contact.unit
+      : "month"
+  );
+  const [keepInTouch, setKeepInTouch] = useState(
+    existingFriend ? Boolean(existingFriend.max_time_between_contact) : true
+  );
+  const [selectedTags, setSelectedTags] = useState(
+    existingFriend ? existingFriend.tags : []
+  );
   const [note, setNote] = useState("");
 
   const parsedMaxTimeAmount = tryToParseInt(maxTimeAmount);
@@ -36,16 +60,17 @@ export default function AddFriendForm(props: AddFriendFormProps) {
     }
     const [first, last] = splitFirstAndLastName();
     const noteOrNothing = note.length === 0 ? undefined : note;
-    addFriend(
-      first,
-      isLocal,
-      selectedTags.map((t) => t.id),
-      keepInTouch,
-      last,
-      noteOrNothing,
-      parsedMaxTimeAmount,
-      maxTimeUnit
-    );
+    const newFriend: FriendToSubmit = {
+      first_name: first,
+      last_name: last,
+      long_distance: !isLocal,
+      tag_ids: new Set(selectedTags.map((t) => t.id)),
+      relation: noteOrNothing,
+      max_time_between_contact: keepInTouch
+        ? { amount: parsedMaxTimeAmount, unit: maxTimeUnit }
+        : undefined,
+    };
+    props.submitFriendFn(newFriend);
     props.onSubmit();
   };
 
@@ -229,7 +254,8 @@ export default function AddFriendForm(props: AddFriendFormProps) {
               )}
               disabled={!canSubmit}
             >
-              <PersonIcon className={mainStyles.withinButtonIcon} /> add friend
+              <PersonIcon className={mainStyles.withinButtonIcon} />{" "}
+              {existingFriend ? "update friend" : "add friend"}
             </button>
           </div>
         </div>

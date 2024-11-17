@@ -1,7 +1,7 @@
 import { useState } from "react";
 import formStyles from "./FormStyling.module.css";
 import mainStyles from "./MainPage.module.css";
-import { Friend, FriendBasic } from "../../triplit/schema";
+import { FriendBasic } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
 import { combineClasses } from "../logic/util";
 import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
@@ -12,12 +12,12 @@ import { addHang } from "../logic/database";
 
 interface RecordHangProps {
   onSubmit: () => void;
-  friends: Friend[];
+  friends: FriendBasic[];
 }
 
 export default function RecordHang(props: RecordHangProps) {
   const [selectedDate, setSelectedDate] = useState(new Date() as Date | null);
-  const [selectedFriends, setSelectedFriends] = useState([] as Friend[]);
+  const [selectedFriends, setSelectedFriends] = useState([] as FriendBasic[]);
   const [note, setNote] = useState("");
 
   const canSubmit = selectedFriends.length > 0 && selectedDate;
