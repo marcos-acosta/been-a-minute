@@ -1,4 +1,4 @@
-import { PersonIcon } from "@radix-ui/react-icons";
+import { Pencil1Icon, PersonIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Friend } from "../../triplit/schema";
 import {
   formatHangFrequency,
@@ -6,13 +6,25 @@ import {
 } from "../logic/rendering";
 import styles from "./FriendCard.module.css";
 import { getDaysOverdue, getLastHangDate } from "../logic/logic";
-import { combineClasses } from "../logic/util";
+import { combineClasses, joinNodes } from "../logic/util";
+import { useState } from "react";
+import { removeFriend } from "../logic/database";
 
 export default function FriendCard({ friend }: { friend: Friend }) {
+  const [isHovering, setIsHovering] = useState(false);
   const lastHangDate = getLastHangDate(friend);
   const daysOverdue = getDaysOverdue(friend);
+
+  const handleDelete = (id: string) => {
+    removeFriend(id);
+  };
+
   return (
-    <div className={styles.friendCardContainer}>
+    <div
+      className={styles.friendCardContainer}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       <div className={combineClasses(styles.nameContainer, "notoSerifBasic")}>
         <div className={styles.personIconContainer}>
           <PersonIcon />
@@ -20,6 +32,21 @@ export default function FriendCard({ friend }: { friend: Friend }) {
         <div className={styles.firstName}>{friend.first_name}</div>
         {friend.last_name && (
           <div className={styles.lastName}>{friend.last_name}</div>
+        )}
+        {isHovering && (
+          <div className={styles.actionButtonsContainer}>
+            {joinNodes(
+              [
+                <button className={styles.actionButton}>
+                  <Pencil1Icon />
+                </button>,
+                <button className={styles.actionButton}>
+                  <TrashIcon onClick={() => handleDelete(friend.id)} />
+                </button>,
+              ],
+              <div className={styles.space}></div>
+            )}
+          </div>
         )}
       </div>
       <div className={styles.lastMeeting}>

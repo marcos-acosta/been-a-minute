@@ -9,7 +9,7 @@ import {
 import FriendCard from "./FriendCard";
 import {
   MagnifyingGlassIcon,
-  Pencil1Icon,
+  Pencil2Icon,
   PersonIcon,
 } from "@radix-ui/react-icons";
 import useKeyboardControl, { KeyboardHook } from "react-keyboard-control";
@@ -112,7 +112,7 @@ export default function MainPage(props: MainPageProps) {
                     className={styles.themedButton}
                     onClick={switchToRecordHangForm}
                   >
-                    <Pencil1Icon className={styles.withinButtonIcon} />
+                    <Pencil2Icon className={styles.withinButtonIcon} />
                     record hang
                   </button>
                 </div>

@@ -8,6 +8,7 @@ import AutocompleteInput from "./AutocompleteInput";
 import { combineClasses, tryToParseInt } from "../logic/util";
 import { ArrowLeftIcon, PersonIcon } from "@radix-ui/react-icons";
 import { textToColor } from "../logic/rendering";
+import { addFriend, saveTag } from "../logic/database";
 
 interface AddFriendFormProps {
   onSubmit: () => void;
@@ -30,29 +31,28 @@ export default function AddFriendForm(props: AddFriendFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!canSubmit) {
+      return;
+    }
     const [first, last] = splitFirstAndLastName();
-    await triplit.insert("friends", {
-      first_name: first,
-      last_name: last,
-      relation: note.length > 0 ? note : undefined,
-      long_distance: !isLocal,
-      max_time_between_contact: keepInTouch
-        ? {
-            amount: parseInt(maxTimeAmount),
-            unit: maxTimeUnit,
-          }
-        : undefined,
-      tag_ids: new Set(selectedTags.map((tag) => tag.id)),
-    });
+    const noteOrNothing = note.length === 0 ? undefined : note;
+    addFriend(
+      first,
+      isLocal,
+      selectedTags.map((t) => t.id),
+      keepInTouch,
+      last,
+      noteOrNothing,
+      parsedMaxTimeAmount,
+      maxTimeUnit
+    );
     props.onSubmit();
   };
 
   const addTagToDatabase = async (
     tagText: string
   ): Promise<TagBasic | undefined> => {
-    const insertedTag = await triplit.insert("tags", {
-      name: tagText,
-    });
+    const insertedTag = await saveTag(tagText);
     return insertedTag.output;
   };
 

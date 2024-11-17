@@ -1,14 +1,14 @@
 import { useState } from "react";
 import formStyles from "./FormStyling.module.css";
 import mainStyles from "./MainPage.module.css";
-import { triplit } from "../../triplit/client";
 import { Friend, FriendBasic } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
 import { combineClasses } from "../logic/util";
-import { ArrowLeftIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { getFullName } from "../logic/logic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { addHang } from "../logic/database";
 
 interface RecordHangProps {
   onSubmit: () => void;
@@ -24,12 +24,13 @@ export default function RecordHang(props: RecordHangProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedDate && selectedFriends.length > 0) {
-      await triplit.insert("friend_log", {
-        date_contacted: selectedDate,
-        friend_ids: new Set(selectedFriends.map((friend) => friend.id)),
-        notes: note.length > 0 ? note : undefined,
-      });
+    if (canSubmit) {
+      const noteOrNothing = note.length > 0 ? note : undefined;
+      addHang(
+        selectedFriends.map((friend) => friend.id),
+        selectedDate,
+        noteOrNothing
+      );
       props.onSubmit();
     }
   };
@@ -110,7 +111,7 @@ export default function RecordHang(props: RecordHangProps) {
               )}
               disabled={!canSubmit}
             >
-              <Pencil1Icon className={mainStyles.withinButtonIcon} /> record
+              <Pencil2Icon className={mainStyles.withinButtonIcon} /> record
               hang
             </button>
           </div>
