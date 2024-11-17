@@ -1,4 +1,4 @@
-import { TimeUnit } from "../../triplit/schema";
+import { TagBasic, TimeUnit } from "../../triplit/schema";
 import {
   differenceInCalendarDays,
   differenceInHours,
@@ -60,3 +60,6 @@ export const textToColor = (text: string) => {
     mod(simpleHash(text), Object.values(COLORS).length)
   ];
 };
+
+export const tagToColor = (tag: TagBasic) =>
+  textToColor(`${tag.id}${tag.name}`);

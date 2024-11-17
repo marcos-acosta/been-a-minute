@@ -11,7 +11,7 @@ import {
 import AutocompleteInput from "./AutocompleteInput";
 import { combineClasses, tryToParseInt } from "../logic/util";
 import { ArrowLeftIcon, PersonIcon } from "@radix-ui/react-icons";
-import { textToColor } from "../logic/rendering";
+import { tagToColor } from "../logic/rendering";
 import { saveTag } from "../logic/database";
 import { getFullName } from "../logic/logic";
 
@@ -239,7 +239,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
               addNewOption={addTagToDatabase}
               placeholder="add a tag"
               optionStylingFunction={(tag: TagBasic) => ({
-                backgroundColor: textToColor(tag.name),
+                backgroundColor: tagToColor(tag),
               })}
               inputClasses={[formStyles.inputHeight]}
             />

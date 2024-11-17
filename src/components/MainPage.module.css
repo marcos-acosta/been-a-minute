@@ -4,10 +4,14 @@
 }
 
 .header {
-  margin-bottom: 25px;
-  padding-top: 50px;
-  padding-bottom: 20px;
+  margin-bottom: 35px;
+  padding-top: 35px;
+  padding-bottom: 35px;
   font-size: 14pt;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  border-bottom: 3px double var(--theme-light-black);
 }
 
 .filterPanel {
@@ -28,6 +32,18 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
+}
+
+@media (max-width: 1650px) {
+  .friendListContainer {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 1100px) {
+  .friendListContainer {
+    grid-template-columns: 1fr;
+  }
 }
 
 .themedButton {
@@ -72,7 +88,7 @@
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  border: 1px dashed var(--theme-light-black);
+  border: 1px solid var(--theme-light-black);
   border-radius: 10px;
   height: 100%;
   box-sizing: border-box;

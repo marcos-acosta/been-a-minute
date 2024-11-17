@@ -9,6 +9,7 @@ import { getDaysOverdue, getLastHangDate } from "../logic/logic";
 import { combineClasses, joinNodes } from "../logic/util";
 import { useState } from "react";
 import { removeFriend } from "../logic/database";
+import Tag from "./Tag";
 
 export default function FriendCard({
   friend,
@@ -71,6 +72,12 @@ export default function FriendCard({
                 </>
               )}
           </>
+        )}
+      </div>
+      <div className={styles.tagContainer}>
+        {joinNodes(
+          friend.tags.map((tag) => <Tag tag={tag} />),
+          <div className={styles.tagDelimiter} />
         )}
       </div>
     </div>

@@ -1,0 +1,7 @@
+.tagContainer {
+  display: inline-block;
+  padding: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+}
