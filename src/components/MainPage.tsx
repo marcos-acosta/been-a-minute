@@ -8,7 +8,11 @@ import {
   sortFriendsByOverdueThenName,
 } from "./../logic/logic";
 import FriendCard from "./FriendCard";
-import { Pencil2Icon, PersonIcon } from "@radix-ui/react-icons";
+import {
+  MagnifyingGlassIcon,
+  Pencil2Icon,
+  PersonIcon,
+} from "@radix-ui/react-icons";
 import useKeyboardControl, { KeyboardHook } from "react-keyboard-control";
 import AddFriendForm from "./AddFriendForm";
 import RecordHangForm from "./RecordHangForm";
@@ -70,7 +74,7 @@ export default function MainPage(props: MainPageProps) {
 
   const keyboardHooks: KeyboardHook[] = [
     {
-      keyboardEvent: [{ key: "/" }],
+      keyboardEvent: [{ key: "q" }],
       callback: focusSearchBar,
       preventDefault: true,
       allowWhen: props.pageState === PageState.FRIEND_LIST,
@@ -110,24 +114,30 @@ export default function MainPage(props: MainPageProps) {
                     friend
                   </button>
                 </div>
-                <AutocompleteInput
-                  options={tags}
-                  selectedOptions={selectedTags}
-                  setSelectedOptions={setSelectedTags}
-                  labelFunction={(t: Tag) => t.name}
-                  getOptionId={(t: Tag) => t.id}
-                  allowAddNew={false}
-                  optionStylingFunction={(t: Tag) => ({
-                    backgroundColor: tagToColor(t),
-                  })}
-                  placeholder={"search"}
-                  activationCharacter="#"
-                  displayLabelFn={formatTag}
-                  remainderText={searchText}
-                  setRemainderText={setSearchText}
-                  inputRef={searchBarRef}
-                  showResultsOnActivationCharacter
-                />
+                <div className={styles.searchContainer}>
+                  <div className={styles.searchIconContainer}>
+                    <MagnifyingGlassIcon />
+                  </div>
+                  <AutocompleteInput
+                    options={tags}
+                    selectedOptions={selectedTags}
+                    setSelectedOptions={setSelectedTags}
+                    labelFunction={(t: Tag) => t.name}
+                    getOptionId={(t: Tag) => t.id}
+                    allowAddNew={false}
+                    optionStylingFunction={(t: Tag) => ({
+                      backgroundColor: tagToColor(t),
+                    })}
+                    placeholder={"search"}
+                    activationCharacter="#"
+                    displayLabelFn={formatTag}
+                    remainderText={searchText}
+                    setRemainderText={setSearchText}
+                    inputClasses={[styles.searchInput]}
+                    inputRef={searchBarRef}
+                    showResultsOnActivationCharacter
+                  />
+                </div>
                 <div className={styles.addHangButtonContainer}>
                   <button
                     className={styles.themedButton}
