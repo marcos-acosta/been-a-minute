@@ -5,3 +5,7 @@
   padding-right: 10px;
   border-radius: 5px;
 }
+
+.grayText {
+  color: var(--theme-gray);
+}

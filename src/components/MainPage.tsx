@@ -2,23 +2,22 @@ import { useRef, useState } from "react";
 import { triplit } from "../../triplit/client";
 import { useQuery } from "@triplit/react";
 import styles from "./MainPage.module.css";
+import tagStyles from "./Tag.module.css";
 import {
-  filterFriendsByQuery,
+  filterFriendsByQueryAndTags,
   sortFriendsByOverdueThenName,
 } from "./../logic/logic";
 import FriendCard from "./FriendCard";
-import {
-  MagnifyingGlassIcon,
-  Pencil2Icon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
+import { Pencil2Icon, PersonIcon } from "@radix-ui/react-icons";
 import useKeyboardControl, { KeyboardHook } from "react-keyboard-control";
 import AddFriendForm from "./AddFriendForm";
 import RecordHangForm from "./RecordHangForm";
-import { callbackOnEscape, combineClasses } from "./../logic/util";
+import { combineClasses } from "./../logic/util";
 import { PageState } from "../App";
 import { addFriend, updateFriend } from "../logic/database";
-import { FriendToSubmit } from "../../triplit/schema";
+import { FriendToSubmit, Tag } from "../../triplit/schema";
+import AutocompleteInput from "./AutocompleteInput";
+import { tagToColor } from "../logic/rendering";
 
 function useFriends() {
   const friendsQuery = triplit
@@ -45,15 +44,14 @@ export default function MainPage(props: MainPageProps) {
   const [friendIdBeingUpdated, setFriendIdBeingUpdated] = useState(
     null as null | string
   );
+  const [selectedTags, setSelectedTags] = useState([] as Tag[]);
   const searchBarRef = useRef<HTMLInputElement>(null);
   const { friends } = useFriends();
   const { tags } = useTags();
 
   const filteredFriends =
     friends &&
-    (searchText.length > 0
-      ? filterFriendsByQuery(friends, searchText)
-      : friends);
+    filterFriendsByQueryAndTags(friends, searchText.trim(), selectedTags);
 
   const sortedFriends =
     filteredFriends && sortFriendsByOverdueThenName(filteredFriends);
@@ -62,13 +60,6 @@ export default function MainPage(props: MainPageProps) {
     if (searchBarRef.current) {
       searchBarRef.current.focus();
     }
-  };
-
-  const blurSearchBar = () => {
-    if (searchBarRef.current) {
-      searchBarRef.current.blur();
-    }
-    setSearchText("");
   };
 
   const switchToAddFriendForm = () =>
@@ -95,6 +86,13 @@ export default function MainPage(props: MainPageProps) {
   const friendBeingEdited =
     friends && friends.find((friend) => friend.id === friendIdBeingUpdated);
 
+  const formatTag = (tagName: string) => (
+    <>
+      <span className={tagStyles.grayText}>#</span>
+      {tagName}
+    </>
+  );
+
   return (
     friends &&
     tags && (
@@ -112,16 +110,23 @@ export default function MainPage(props: MainPageProps) {
                     friend
                   </button>
                 </div>
-                <div className={styles.searchIconContainer}>
-                  <MagnifyingGlassIcon />
-                </div>
-                <input
-                  className={styles.searchInput}
-                  value={searchText}
-                  placeholder="search"
-                  onChange={(e) => setSearchText(e.target.value)}
-                  onKeyDown={(e) => callbackOnEscape(e, blurSearchBar)}
-                  ref={searchBarRef}
+                <AutocompleteInput
+                  options={tags}
+                  selectedOptions={selectedTags}
+                  setSelectedOptions={setSelectedTags}
+                  labelFunction={(t: Tag) => t.name}
+                  getOptionId={(t: Tag) => t.id}
+                  allowAddNew={false}
+                  optionStylingFunction={(t: Tag) => ({
+                    backgroundColor: tagToColor(t),
+                  })}
+                  placeholder={"search"}
+                  activationCharacter="#"
+                  displayLabelFn={formatTag}
+                  remainderText={searchText}
+                  setRemainderText={setSearchText}
+                  inputRef={searchBarRef}
+                  showResultsOnActivationCharacter
                 />
                 <div className={styles.addHangButtonContainer}>
                   <button

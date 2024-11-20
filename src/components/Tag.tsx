@@ -8,6 +8,7 @@ export default function Tag({ tag }: { tag: TagBasic }) {
       className={styles.tagContainer}
       style={{ backgroundColor: tagToColor(tag) }}
     >
+      <span className={styles.grayText}>#</span>
       {tag.name}
     </div>
   );

@@ -5,30 +5,30 @@
 
 .header {
   margin-bottom: 35px;
-  padding-top: 35px;
-  padding-bottom: 35px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   font-size: 14pt;
   position: sticky;
   top: 0;
   background-color: white;
-  border-bottom: 3px double var(--theme-light-black);
+  border-bottom: 3px solid var(--theme-light-gray);
 }
 
 .filterPanel {
-  width: 70%;
+  width: 80%;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding-left: 15%;
-  padding-right: 15%;
+  padding-left: 10%;
+  padding-right: 10%;
   height: 40px;
   position: relative;
 }
 
 .friendListContainer {
-  width: 70%;
-  margin-left: 15%;
+  width: 80%;
+  margin-left: 10%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
@@ -94,10 +94,13 @@
   box-sizing: border-box;
 }
 
-.searchIconContainer {
-  margin-right: 12px;
+.filterContainer {
+  margin-left: 12px;
   color: var(--theme-light-black);
   display: flex;
   flex-direction: row;
   justify-content: center;
+  font-size: inherit;
+  background-color: transparent;
+  cursor: pointer;
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./AddFriendForm.module.css";
 import formStyles from "./FormStyling.module.css";
 import mainStyles from "./MainPage.module.css";
+import tagStyles from "./Tag.module.css";
 import {
   Friend,
   FriendToSubmit,
@@ -21,6 +22,13 @@ interface AddFriendFormProps {
   submitFriendFn: (f: FriendToSubmit) => void;
   existingFriend?: Friend;
 }
+
+const formatTag = (tagName: string) => (
+  <>
+    <span className={tagStyles.grayText}>#</span>
+    {tagName}
+  </>
+);
 
 export default function AddFriendForm(props: AddFriendFormProps) {
   const existingFriend = props.existingFriend;
@@ -242,6 +250,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
                 backgroundColor: tagToColor(tag),
               })}
               inputClasses={[formStyles.inputHeight]}
+              displayLabelFn={formatTag}
             />
           </div>
           <div />

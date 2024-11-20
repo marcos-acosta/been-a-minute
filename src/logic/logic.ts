@@ -1,5 +1,11 @@
 import { differenceInCalendarDays } from "date-fns";
-import { Friend, FriendBasic, HangBasic, TimeUnit } from "../../triplit/schema";
+import {
+  Friend,
+  FriendBasic,
+  HangBasic,
+  Tag,
+  TimeUnit,
+} from "../../triplit/schema";
 
 export const getFullName = (friend: FriendBasic) =>
   friend.first_name + (friend.last_name ? ` ${friend.last_name}` : "");
@@ -21,12 +27,23 @@ function getDaysFromHangFrequency({
   return UNIT_TO_DAYS[unit] * amount;
 }
 
-export const filterFriendsByQuery = (friends: Friend[], query: string) => {
-  return friends.filter(
+export const filterFriendsByQuery = (friends: Friend[], query: string) =>
+  friends.filter(
     (friend) =>
       getFullName(friend).toLowerCase().search(query.toLowerCase()) !== -1
   );
-};
+
+export const filterFriendsByTags = (friends: Friend[], tags: Tag[]) =>
+  friends.filter((friend) => {
+    const friendTagNames = friend.tags.map((tag) => tag.name);
+    return tags.every((tag) => friendTagNames.includes(tag.name));
+  });
+
+export const filterFriendsByQueryAndTags = (
+  friends: Friend[],
+  query: string,
+  tags: Tag[]
+) => filterFriendsByTags(filterFriendsByQuery(friends, query), tags);
 
 export const sortHangsByRecency = (hangs: HangBasic[]) =>
   hangs.sort(
