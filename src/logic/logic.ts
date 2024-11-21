@@ -91,12 +91,6 @@ export const sortFriendsByOverdueThenName = (friends: Friend[]) =>
   friends.sort((friendA, friendB) => {
     const daysOverdueA = undefinedToInfinity(getDaysOverdue(friendA));
     const daysOverdueB = undefinedToInfinity(getDaysOverdue(friendB));
-    console.log(
-      friendA.first_name,
-      daysOverdueA,
-      friendB.first_name,
-      daysOverdueB
-    );
     const daysSinceLastHangA = undefinedToInfinity(
       getDaysSinceLastHang(friendA)
     );

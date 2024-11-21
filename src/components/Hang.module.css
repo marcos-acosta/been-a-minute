@@ -1,0 +1,38 @@
+.hangContainer {
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid var(--theme-black);
+  box-shadow: 1px 1px 0 0 var(--theme-black);
+  padding: 10px;
+  padding-left: 15px;
+}
+
+.hangDate {
+  font-family: "Noto Serif", serif;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.friendName {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
+  cursor: pointer;
+  background-color: var(--theme-light-gray);
+  transition-property: background-color;
+  transition-duration: 0.25s;
+}
+
+.divider {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-top: 1px dashed var(--theme-black);
+}
+
+.friendName:hover {
+  background-color: var(--theme-light-gray-hover);
+}

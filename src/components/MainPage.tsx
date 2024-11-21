@@ -22,6 +22,7 @@ import { addFriend, updateFriend } from "../logic/database";
 import { FriendToSubmit, Tag } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
 import { tagToColor } from "../logic/rendering";
+import FriendDetailPage from "./FriendDetailPage";
 
 function useFriends() {
   const friendsQuery = triplit
@@ -46,6 +47,9 @@ interface MainPageProps {
 export default function MainPage(props: MainPageProps) {
   const [searchText, setSearchText] = useState("");
   const [friendIdBeingUpdated, setFriendIdBeingUpdated] = useState(
+    null as null | string
+  );
+  const [selectedFriendId, setSelectedFriendId] = useState(
     null as null | string
   );
   const [selectedTags, setSelectedTags] = useState([] as Tag[]);
@@ -87,8 +91,15 @@ export default function MainPage(props: MainPageProps) {
     props.setPageState(PageState.EDIT_FRIEND);
   };
 
+  const selectFriend = (id: string) => {
+    setSelectedFriendId(id);
+    props.setPageState(PageState.FRIEND_DETAIL);
+  };
+
   const friendBeingEdited =
     friends && friends.find((friend) => friend.id === friendIdBeingUpdated);
+  const selectedFriend =
+    friends && friends.find((friend) => friend.id === selectedFriendId);
 
   const formatTag = (tagName: string) => (
     <>
@@ -155,6 +166,7 @@ export default function MainPage(props: MainPageProps) {
                   key={friend.id}
                   friend={friend}
                   startEditingFn={() => startEditingFriend(friend.id)}
+                  selectFriendFn={() => selectFriend(friend.id)}
                 />
               ))}
             </div>
@@ -176,8 +188,17 @@ export default function MainPage(props: MainPageProps) {
             tags={tags}
             existingFriend={friendBeingEdited}
           />
-        ) : (
+        ) : props.pageState === PageState.RECORD_A_HANG ? (
           <RecordHangForm onSubmit={switchToFriendList} friends={friends} />
+        ) : props.pageState === PageState.FRIEND_DETAIL && selectedFriend ? (
+          <FriendDetailPage
+            friend={selectedFriend}
+            friends={friends}
+            onGoBack={switchToFriendList}
+            selectFriendFn={selectFriend}
+          />
+        ) : (
+          <>Unknown page state</>
         )}
       </div>
     )

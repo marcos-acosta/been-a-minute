@@ -3,6 +3,12 @@
   padding-left: 15px;
   border: 1px solid var(--theme-light-black);
   border-radius: 15px;
+  box-shadow: 1px 1px 0 0 var(--theme-black);
+  cursor: pointer;
+  text-align: left;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
 }
 
 .personIconContainer {
@@ -12,6 +18,7 @@
 
 .nameContainer {
   font-size: 1.5em;
+  font-family: "Noto Serif", serif;
 }
 
 .firstName {
@@ -31,23 +38,32 @@
 
 .actionButtonsContainer {
   display: inline-flex;
-  margin-left: 20px;
+  margin-left: 15px;
   flex-direction: row;
   align-items: center;
 }
 
 .space {
   display: inline-block;
-  width: 10px;
+  width: 5px;
 }
 
 .actionButton {
   background-color: transparent;
   cursor: pointer;
-  display: inline-block;
-  height: min-content;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0;
+  padding-bottom: 0;
+  width: 30px;
+  height: 30px;
   margin: 0;
+  border-radius: 50%;
+}
+
+.actionButton:hover {
+  background-color: var(--theme-light-gray);
 }
 
 .tagContainer {

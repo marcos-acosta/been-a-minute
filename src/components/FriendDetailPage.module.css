@@ -1,0 +1,62 @@
+.friendDetailPageContainer {
+  width: 100vw;
+  padding-left: 10%;
+  padding-right: 3%;
+  box-sizing: border-box;
+}
+
+.backButtonContainer {
+  height: 50px;
+  margin-bottom: 10px;
+  margin-top: 40px;
+}
+
+.friendDetailsContainer {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+}
+
+.nameContainer {
+  font-size: 3em;
+  font-family: "Noto Serif", serif;
+  margin-bottom: 10px;
+}
+
+.friendDetails {
+  padding-right: 30px;
+}
+
+.friendTagContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tagDelimiter {
+  display: inline-block;
+  width: 5px;
+}
+
+.divider {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: none;
+  border-top: 1px dashed var(--theme-black);
+}
+
+.friendNote {
+  font-size: 1.2em;
+}
+
+.hangListContainer {
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.hangListTitle {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  font-family: "Noto Serif", serif;
+}

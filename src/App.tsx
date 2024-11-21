@@ -7,6 +7,8 @@ export enum PageState {
   ADD_A_FRIEND,
   RECORD_A_HANG,
   EDIT_FRIEND,
+  FRIEND_DETAIL,
+  HANG_LIST,
 }
 
 export default function App() {

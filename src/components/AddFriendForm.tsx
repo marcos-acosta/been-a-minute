@@ -264,7 +264,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
               disabled={!canSubmit}
             >
               <PersonIcon className={mainStyles.withinButtonIcon} />{" "}
-              {existingFriend ? "update friend" : "add friend"}
+              {existingFriend ? "save friend" : "add friend"}
             </button>
           </div>
         </div>

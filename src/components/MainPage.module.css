@@ -11,7 +11,7 @@
   position: sticky;
   top: 0;
   background-color: white;
-  border-bottom: 3px solid var(--theme-light-gray);
+  border-bottom: 2px dotted var(--theme-light-gray);
 }
 
 .filterPanel {
