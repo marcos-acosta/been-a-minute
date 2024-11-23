@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { triplit } from "../../triplit/client";
 import { useQuery } from "@triplit/react";
 import styles from "./MainPage.module.css";
-import tagStyles from "./Tag.module.css";
 import {
   filterFriendsByQueryAndTags,
   sortFriendsByOverdueThenName,
@@ -101,13 +100,6 @@ export default function MainPage(props: MainPageProps) {
   const selectedFriend =
     friends && friends.find((friend) => friend.id === selectedFriendId);
 
-  const formatTag = (tagName: string) => (
-    <>
-      <span className={tagStyles.grayText}>#</span>
-      {tagName}
-    </>
-  );
-
   return (
     friends &&
     tags && (
@@ -138,10 +130,13 @@ export default function MainPage(props: MainPageProps) {
                     allowAddNew={false}
                     optionStylingFunction={(t: Tag) => ({
                       backgroundColor: tagToColor(t),
+                      fontFamily: "monospace",
+                      paddingTop: "5px",
+                      paddingBottom: "5px",
+                      fontSize: "14px",
                     })}
                     placeholder={"search"}
                     activationCharacter="#"
-                    displayLabelFn={formatTag}
                     remainderText={searchText}
                     setRemainderText={setSearchText}
                     inputClasses={[styles.searchInput]}

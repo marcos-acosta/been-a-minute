@@ -1,11 +1,9 @@
 .tagContainer {
   display: inline-block;
-  padding: 2px;
+  padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
-}
-
-.grayText {
-  color: var(--theme-gray);
+  font-family: monospace;
+  font-size: 14px;
 }

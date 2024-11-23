@@ -71,8 +71,7 @@
   border-left: 1px solid var(--theme-light-black);
   border-right: 1px solid var(--theme-light-black);
   border-bottom: 1px dashed var(--theme-light-black);
-  font-family: inherit;
-  font-size: inherit;
+  font-size: 16px;
 }
 
 .suggestion:first-child {

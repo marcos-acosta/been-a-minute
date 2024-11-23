@@ -7,7 +7,6 @@
   margin-bottom: 35px;
   padding-top: 20px;
   padding-bottom: 20px;
-  font-size: 30px;
   position: sticky;
   top: 0;
   background-color: white;
@@ -52,7 +51,7 @@
   padding-right: 10px;
   background-color: var(--theme-light-black);
   color: white;
-  border-radius: 10px;
+  border-radius: 5px;
   display: inline-flex;
   flex-direction: row;
   align-items: center;
@@ -105,18 +104,7 @@ div.searchInput {
   font-size: 16px;
   outline: none;
   border: 1px solid var(--theme-light-black);
-  border-radius: 10px;
+  border-radius: 5px;
   height: 100%;
   box-sizing: border-box;
-}
-
-.filterContainer {
-  margin-left: 12px;
-  color: var(--theme-light-black);
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  font-size: inherit;
-  background-color: transparent;
-  cursor: pointer;
 }
