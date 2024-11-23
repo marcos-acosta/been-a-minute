@@ -5,7 +5,7 @@ import {
   formatTimeSinceLastHang,
 } from "../logic/rendering";
 import styles from "./FriendCard.module.css";
-import { getDaysOverdue, getLastHangDate } from "../logic/logic";
+import { getDaysOverdue, getLastHangDate, sortTags } from "../logic/logic";
 import { joinNodes } from "../logic/util";
 import { useState } from "react";
 import { removeFriend } from "../logic/database";
@@ -89,7 +89,7 @@ export default function FriendCard({
       </div>
       <div className={styles.tagContainer}>
         {joinNodes(
-          friend.tags.map((tag) => <Tag tag={tag} />),
+          sortTags(friend.tags).map((tag) => <Tag tag={tag} />),
           <div className={styles.tagDelimiter} />
         )}
       </div>

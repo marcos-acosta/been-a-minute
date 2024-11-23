@@ -1,5 +1,5 @@
 import { Friend, FriendBasic } from "../../triplit/schema";
-import { getFullName } from "../logic/logic";
+import { getFullName, sortTags } from "../logic/logic";
 import styles from "./FriendDetailPage.module.css";
 import mainStyles from "./MainPage.module.css";
 import formStyles from "./FormStyling.module.css";
@@ -77,7 +77,7 @@ export default function FriendDetailPage(props: FriendDetailPageProps) {
           {props.friend.tags.length > 0 && (
             <div className={styles.friendTagContainer}>
               {joinNodes(
-                props.friend.tags.map((tag) => (
+                sortTags(props.friend.tags).map((tag) => (
                   <Tag tag={tag} styleClasses={[styles.tagContainer]} />
                 )),
                 <div className={styles.tagDelimiter} />

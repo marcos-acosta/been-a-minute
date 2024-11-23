@@ -4,6 +4,7 @@ import {
   FriendBasic,
   HangBasic,
   Tag,
+  TagBasic,
   TimeUnit,
 } from "../../triplit/schema";
 
@@ -126,3 +127,6 @@ export const simpleHash = (str: string) => {
   // Convert to 32bit unsigned integer in base 36 and pad with "0" to ensure length is 7.
   return hash;
 };
+
+export const sortTags = (tags: TagBasic[]) =>
+  tags.sort((tagA, tagB) => (tagA.name < tagB.name ? -1 : 1));
