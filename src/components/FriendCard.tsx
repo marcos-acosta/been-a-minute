@@ -29,20 +29,24 @@ export default function FriendCard({
   };
 
   return (
-    <button
+    <div
       className={styles.friendCardContainer}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onClick={selectFriendFn}
     >
       <div className={styles.nameContainer}>
         <div className={styles.personIconContainer}>
           <PersonIcon />
         </div>
-        <div className={styles.firstName}>{friend.first_name}</div>
-        {friend.last_name && (
-          <div className={styles.lastName}>{friend.last_name}</div>
-        )}
+        <button className={styles.fullNameContainer} onClick={selectFriendFn}>
+          <div className={styles.firstName}>{friend.first_name}</div>
+          {friend.last_name && (
+            <>
+              {" "}
+              <div className={styles.lastName}>{friend.last_name}</div>
+            </>
+          )}
+        </button>
         {isHovering && (
           <div className={styles.actionButtonsContainer}>
             {joinNodes(
@@ -89,6 +93,6 @@ export default function FriendCard({
           <div className={styles.tagDelimiter} />
         )}
       </div>
-    </button>
+    </div>
   );
 }

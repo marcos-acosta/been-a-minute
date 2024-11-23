@@ -1,14 +1,22 @@
 import { TagBasic } from "../../triplit/schema";
 import { tagToColor } from "../logic/rendering";
+import { combineClasses } from "../logic/util";
 import styles from "./Tag.module.css";
 
-export default function Tag({ tag }: { tag: TagBasic }) {
+interface TagProps {
+  tag: TagBasic;
+  styleClasses?: string[];
+}
+
+export default function Tag(props: TagProps) {
   return (
     <div
-      className={styles.tagContainer}
-      style={{ backgroundColor: tagToColor(tag) }}
+      className={combineClasses(
+        ...[styles.tagContainer, ...(props.styleClasses || [])]
+      )}
+      style={{ backgroundColor: tagToColor(props.tag) }}
     >
-      {tag.name}
+      {props.tag.name}
     </div>
   );
 }

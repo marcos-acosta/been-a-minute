@@ -3,7 +3,6 @@
   padding-left: 15px;
   border: 1px solid var(--theme-light-black);
   border-radius: 15px;
-  cursor: pointer;
   text-align: left;
   background-color: white;
   display: flex;
@@ -16,19 +15,30 @@
 }
 
 .nameContainer {
-  font-size: 1.5em;
+  font-size: 24px;
   font-family: "Noto Serif", serif;
+}
+
+.fullNameContainer {
+  display: inline-block;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.fullNameContainer:hover {
+  text-decoration: underline;
 }
 
 .firstName {
   display: inline-block;
   font-weight: bold;
+  text-decoration: inherit;
 }
 
 .lastName {
   display: inline-block;
-  margin-left: 0.25em;
   font-style: italic;
+  text-decoration: inherit;
 }
 
 .lastMeeting {

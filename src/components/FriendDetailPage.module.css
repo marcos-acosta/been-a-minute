@@ -1,7 +1,7 @@
 .friendDetailPageContainer {
   width: 100vw;
-  padding-left: 10%;
-  padding-right: 3%;
+  max-height: 100vh;
+  padding-left: 5%;
   box-sizing: border-box;
 }
 
@@ -22,8 +22,13 @@
   margin-bottom: 10px;
 }
 
+.tagContainer {
+  margin-bottom: 5px;
+}
+
 .friendDetails {
-  padding-right: 30px;
+  padding-right: 20px;
+  max-height: 100vh;
 }
 
 .friendTagContainer {
@@ -35,26 +40,36 @@
   width: 5px;
 }
 
-.divider {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: none;
-  border-top: 1px dashed var(--theme-black);
-}
-
 .friendNote {
   font-size: 22px;
 }
 
 .hangListContainer {
-  padding: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
   font-size: 22px;
+  border-left: 2px solid var(--theme-light-gray);
+  overflow-y: scroll;
+  height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.hangListTitle {
-  font-size: 30px;
+.hangTitleContainer {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  width: inherit;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  /* border-bottom: 2px dashed var(--theme-light-gray); */
   margin-bottom: 20px;
-  font-family: "Noto Serif", serif;
+  font-family: "Noto Serif";
+  font-style: italic;
+}
+
+.hangList {
+  padding-left: 20px;
+  padding-right: 20px;
 }

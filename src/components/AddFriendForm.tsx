@@ -46,7 +46,9 @@ export default function AddFriendForm(props: AddFriendFormProps) {
   const [selectedTags, setSelectedTags] = useState(
     existingFriend ? existingFriend.tags : []
   );
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState(
+    existingFriend?.relation ? existingFriend.relation : ""
+  );
 
   const parsedMaxTimeAmount = tryToParseInt(maxTimeAmount);
 

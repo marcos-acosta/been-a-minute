@@ -14,42 +14,49 @@ interface FriendDetailPageProps {
 }
 
 export default function FriendDetailPage(props: FriendDetailPageProps) {
+  const hangs = props.friend.meetings.sort(
+    (hangA, hangB) =>
+      hangB.date_contacted.valueOf() - hangA.date_contacted.valueOf()
+  );
+
   return (
     <div className={styles.friendDetailPageContainer}>
-      <div className={styles.backButtonContainer}>
-        <button className={formStyles.backButton} onClick={props.onGoBack}>
-          back
-        </button>
-      </div>
       <div className={styles.friendDetailsContainer}>
         <div className={styles.friendDetails}>
+          <div className={styles.backButtonContainer}>
+            <button className={formStyles.backButton} onClick={props.onGoBack}>
+              back
+            </button>
+          </div>
           <div className={styles.nameContainer}>
             {getFullName(props.friend)}
           </div>
           {props.friend.tags.length > 0 && (
             <div className={styles.friendTagContainer}>
               {joinNodes(
-                props.friend.tags.map((tag) => <Tag tag={tag} />),
+                props.friend.tags.map((tag) => (
+                  <Tag tag={tag} styleClasses={[styles.tagContainer]} />
+                )),
                 <div className={styles.tagDelimiter} />
               )}
             </div>
           )}
           {props.friend.relation && (
-            <>
-              <hr className={styles.divider} />
-              <div className={styles.friendNote}>{props.friend.relation}</div>
-            </>
+            <div className={styles.friendNote}>{props.friend.relation}</div>
           )}
         </div>
         <div className={styles.hangListContainer}>
-          <div className={styles.hangListTitle}>Recent hangs</div>
+          <div className={styles.hangTitleContainer}>
+            <div className={styles.hangTitle}>Recent hangs</div>
+          </div>
           <div className={styles.hangList}>
-            {props.friend.meetings.map((hang) => (
+            {hangs.map((hang) => (
               <Hang
                 hang={hang}
                 friends={props.friends}
                 key={hang.id}
                 selectFriendFn={props.selectFriendFn}
+                selectedFriendId={props.friend.id}
               />
             ))}
           </div>
