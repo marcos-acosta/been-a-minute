@@ -1,5 +1,10 @@
 import { triplit } from "../../triplit/client";
-import { Friend, FriendToSubmit } from "../../triplit/schema";
+import {
+  Friend,
+  FriendToSubmit,
+  HangBasic,
+  TagBasic,
+} from "../../triplit/schema";
 
 export const addFriend = async (friend: FriendToSubmit) => {
   const inserted = await triplit.insert("friends", friend);
@@ -31,8 +36,16 @@ export const addHang = async (
   });
 };
 
+export const addHangNew = async (hang: HangBasic) => {
+  await triplit.insert("friend_log", hang);
+};
+
 export const saveTag = async (tagText: string) => {
   return await triplit.insert("tags", {
     name: tagText,
   });
+};
+
+export const saveTagWithId = async (tag: TagBasic) => {
+  return await triplit.insert("tags", tag);
 };

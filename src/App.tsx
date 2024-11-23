@@ -3,6 +3,7 @@ import useKeyboardControl, { KeyboardHook } from "react-keyboard-control";
 import MainPage from "./components/MainPage";
 
 export enum PageState {
+  DEV,
   FRIEND_LIST,
   ADD_A_FRIEND,
   RECORD_A_HANG,
@@ -35,6 +36,10 @@ export default function App() {
       keyboardEvent: [{ key: "Escape" }],
       callback: switchToFriendList,
       allowWhen: pageState !== PageState.FRIEND_LIST,
+    },
+    {
+      keyboardEvent: [{ key: "d" }],
+      callback: () => setPageState(PageState.DEV),
     },
   ];
   useKeyboardControl(keyboardHooks);

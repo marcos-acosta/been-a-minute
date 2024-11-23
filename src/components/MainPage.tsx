@@ -22,6 +22,7 @@ import { FriendToSubmit, Tag } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
 import { tagToColor } from "../logic/rendering";
 import FriendDetailPage from "./FriendDetailPage";
+import Dev from "./Dev";
 
 function useFriends() {
   const friendsQuery = triplit
@@ -192,8 +193,10 @@ export default function MainPage(props: MainPageProps) {
             onGoBack={switchToFriendList}
             selectFriendFn={selectFriend}
           />
+        ) : props.pageState === PageState.DEV ? (
+          <Dev friends={friends} tags={tags} />
         ) : (
-          <>Unknown page state</>
+          <div>Unknown page state</div>
         )}
       </div>
     )
