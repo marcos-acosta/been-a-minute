@@ -63,7 +63,6 @@
   justify-content: center;
   align-items: center;
   height: 60px;
-  /* border-bottom: 2px dashed var(--theme-light-gray); */
   margin-bottom: 20px;
   font-family: "Noto Serif";
   font-style: italic;
@@ -72,4 +71,26 @@
 .hangList {
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.noHangsContainer {
+  font-size: 18px;
+  color: var(--theme-gray);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noHangsMessageContainer {
+  text-align: center;
+}
+
+.bears {
+  margin-bottom: 5px;
+}
+
+.noHangsMessage {
+  font-style: italic;
 }

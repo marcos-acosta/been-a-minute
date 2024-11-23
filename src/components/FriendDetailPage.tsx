@@ -46,20 +46,35 @@ export default function FriendDetailPage(props: FriendDetailPageProps) {
           )}
         </div>
         <div className={styles.hangListContainer}>
-          <div className={styles.hangTitleContainer}>
-            <div className={styles.hangTitle}>Recent hangs</div>
-          </div>
-          <div className={styles.hangList}>
-            {hangs.map((hang) => (
-              <Hang
-                hang={hang}
-                friends={props.friends}
-                key={hang.id}
-                selectFriendFn={props.selectFriendFn}
-                selectedFriendId={props.friend.id}
-              />
-            ))}
-          </div>
+          {hangs.length > 0 ? (
+            <>
+              <div className={styles.hangTitleContainer}>
+                <div className={styles.hangTitle}>Recent hangs</div>
+              </div>
+              <div className={styles.hangList}>
+                {hangs.map((hang) => (
+                  <Hang
+                    hang={hang}
+                    friends={props.friends}
+                    key={hang.id}
+                    selectFriendFn={props.selectFriendFn}
+                    selectedFriendId={props.friend.id}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className={styles.noHangsContainer}>
+              <div className={styles.noHangsMessageContainer}>
+                <div className={styles.bears}>
+                  &#661; º ᴥ º&#660;&nbsp;&nbsp;&nbsp;&#661;º ᴥ º &#660;
+                </div>
+                <div className={styles.noHangsMessage}>
+                  You haven't met up yet! Once you do, it'll show up here.
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
