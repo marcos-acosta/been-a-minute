@@ -1,13 +1,13 @@
 .appContainer {
   width: 100vw;
-  font-size: 12pt;
+  font-size: 16px;
 }
 
 .header {
   margin-bottom: 35px;
   padding-top: 20px;
   padding-bottom: 20px;
-  font-size: 14pt;
+  font-size: 30px;
   position: sticky;
   top: 0;
   background-color: white;
@@ -24,7 +24,6 @@
   padding-right: 10%;
   height: 40px;
   position: relative;
-  /* background-color: aliceblue; */
 }
 
 .friendListContainer {
@@ -63,6 +62,7 @@
   height: 100%;
   box-sizing: border-box;
   text-wrap: nowrap;
+  font-size: 16px;
 }
 
 .withinButtonIcon {
@@ -102,7 +102,7 @@
 div.searchInput {
   text-align: center;
   font-family: inherit;
-  font-size: inherit;
+  font-size: 16px;
   outline: none;
   border: 1px solid var(--theme-light-black);
   border-radius: 10px;

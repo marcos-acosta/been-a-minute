@@ -2,20 +2,19 @@
   border-radius: 10px;
   margin-bottom: 20px;
   border: 1px solid var(--theme-black);
-  box-shadow: 1px 1px 0 0 var(--theme-black);
   padding: 10px;
   padding-left: 15px;
 }
 
 .hangDate {
   font-family: "Noto Serif", serif;
-  font-size: 1.2em;
+  font-size: 26px;
   font-weight: bold;
 }
 
 .friendName {
   font-family: inherit;
-  font-size: inherit;
+  font-size: 22px;
   color: inherit;
   border-radius: 5px;
   padding-left: 7px;

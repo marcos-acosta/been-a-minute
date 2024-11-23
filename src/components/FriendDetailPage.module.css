@@ -13,11 +13,11 @@
 
 .friendDetailsContainer {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .nameContainer {
-  font-size: 3em;
+  font-size: 50px;
   font-family: "Noto Serif", serif;
   margin-bottom: 10px;
 }
@@ -27,9 +27,6 @@
 }
 
 .friendTagContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   margin-bottom: 10px;
 }
 
@@ -46,17 +43,18 @@
 }
 
 .friendNote {
-  font-size: 1.2em;
+  font-size: 22px;
 }
 
 .hangListContainer {
   padding: 10px;
   padding-left: 20px;
   padding-right: 20px;
+  font-size: 22px;
 }
 
 .hangListTitle {
-  font-size: 1.5em;
+  font-size: 30px;
   margin-bottom: 20px;
   font-family: "Noto Serif", serif;
 }

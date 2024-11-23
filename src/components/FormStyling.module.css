@@ -1,5 +1,5 @@
 .formPage {
-  font-size: 16pt;
+  font-size: 16px;
   padding-left: 10%;
   padding-top: 40px;
   padding-right: 5px;
@@ -17,6 +17,7 @@
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
+  font-size: 16px;
 }
 
 .backButtonText {
@@ -32,7 +33,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 60px;
+  height: 50px;
   min-width: 500px;
 }
 
@@ -48,7 +49,7 @@
 
 .line {
   flex-grow: 1;
-  border-top: 1px dashed gray;
+  border-top: 1px dashed var(--theme-light-black);
   margin-right: 20px;
   margin-left: 20px;
   height: 0px;
@@ -57,7 +58,7 @@
 .formInput {
   font-size: inherit;
   font-family: inherit;
-  border: 1px gray dashed;
+  border: 1px var(--theme-light-black) solid;
   border-radius: 5px;
   padding: 5px;
   padding-left: 10px;
@@ -68,12 +69,12 @@
 
 .formInput:focus {
   outline: 2px solid var(--theme-blue);
-  border: 1px white dashed;
+  border: 1px white solid;
 }
 
 .formInput.invalid {
   outline: 2px solid red;
-  border: 1px white dashed;
+  border: 1px white solid;
 }
 
 .formInput.invalid:focus {
@@ -91,7 +92,7 @@
   font-size: inherit;
   font-family: inherit;
   background-color: white;
-  border: 1px gray dashed;
+  border: 1px var(--theme-light-black) solid;
   height: 70%;
   border-radius: 5px;
   padding-left: 10px;
@@ -99,7 +100,7 @@
 }
 
 .selector:focus {
-  border: 1px white dashed;
+  border: 1px white solid;
 }
 
 .inputHeight {
@@ -117,7 +118,7 @@
   font-family: inherit;
   padding: 5px;
   padding-left: 10px;
-  border: 1px gray dashed;
+  border: 1px var(--theme-light-black) solid;
   border-radius: 5px;
   resize: none;
 }
@@ -130,16 +131,15 @@
 .submitButton {
   display: inline-flex;
   width: min-content;
+  height: min-content;
   text-wrap: nowrap;
   margin-top: 30px;
+  font-size: 16px;
+  height: 40px;
 }
 
 .submitButton:disabled {
   background-color: var(--theme-light-gray);
-  color: gray;
+  color: var(--theme-light-black);
   box-shadow: none;
-}
-
-.submitButtonContainer {
-  height: 50px;
 }
