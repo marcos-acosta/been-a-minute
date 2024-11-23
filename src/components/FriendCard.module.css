@@ -1,12 +1,15 @@
 .friendCardContainer {
   padding: 10px;
   padding-left: 15px;
-  border: 1px solid var(--theme-light-black);
+  border: 1px solid var(--theme-light-gray);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 4px 12px;
   border-radius: 15px;
   text-align: left;
   background-color: white;
   display: flex;
   flex-direction: column;
+  height: 95px;
+  overflow-y: hidden;
 }
 
 .personIconContainer {
@@ -60,11 +63,12 @@
 .actionButton {
   background-color: transparent;
   cursor: pointer;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-top: 0;
-  padding-bottom: 0;
   width: 30px;
   height: 30px;
   margin: 0;

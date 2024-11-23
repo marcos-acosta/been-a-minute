@@ -113,7 +113,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
   return (
     <div className={formStyles.formPage}>
       <button className={formStyles.backButton} onClick={props.onSubmit}>
-        <ArrowLeftIcon />
+        <ArrowLeftIcon className={mainStyles.withinButtonIcon} />
         <span className={formStyles.backButtonText}>back</span>
       </button>
       <div className={formStyles.title}>
@@ -205,7 +205,7 @@ export default function AddFriendForm(props: AddFriendFormProps) {
           <div className={formStyles.formLabelContainer}>
             <div className={formStyles.labelContainer}>
               <label className={formStyles.formLabel} htmlFor="note">
-                how do you know them?
+                write a short blurb about them:
               </label>
             </div>
             <div className={formStyles.line} />

@@ -6,9 +6,16 @@
 }
 
 .backButtonContainer {
-  height: 50px;
   margin-bottom: 10px;
   margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  height: 35px;
+}
+
+.buttonSeparator {
+  width: 10px;
 }
 
 .friendDetailsContainer {
@@ -41,7 +48,8 @@
 }
 
 .friendNote {
-  font-size: 22px;
+  margin-top: 20px;
+  font-size: 20px;
 }
 
 .hangListContainer {
@@ -69,6 +77,7 @@
 }
 
 .hangList {
+  padding-top: 30px;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -93,4 +102,20 @@
 
 .noHangsMessage {
   font-style: italic;
+}
+
+.noDescription {
+  color: var(--theme-gray);
+  font-style: italic;
+}
+
+.editText {
+  background-color: transparent;
+  font-size: 20px;
+  font-style: italic;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--theme-gray);
+  font-weight: bold;
 }

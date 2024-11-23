@@ -10,7 +10,7 @@
   position: sticky;
   top: 0;
   background-color: white;
-  border-bottom: 2px solid var(--theme-light-gray);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 4px 12px;
 }
 
 .filterPanel {
@@ -29,17 +29,23 @@
   width: 80%;
   margin-left: 10%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 12px;
 }
 
 @media (max-width: 1650px) {
   .friendListContainer {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
 @media (max-width: 1100px) {
+  .friendListContainer {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 750px) {
   .friendListContainer {
     grid-template-columns: 1fr;
   }

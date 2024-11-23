@@ -17,7 +17,7 @@ import AddFriendForm from "./AddFriendForm";
 import RecordHangForm from "./RecordHangForm";
 import { combineClasses } from "./../logic/util";
 import { PageState } from "../App";
-import { addFriend, updateFriend } from "../logic/database";
+import { addFriend, removeFriend, updateFriend } from "../logic/database";
 import { FriendToSubmit, Tag } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
 import { tagToColor } from "../logic/rendering";
@@ -53,9 +53,13 @@ export default function MainPage(props: MainPageProps) {
     null as null | string
   );
   const [selectedTags, setSelectedTags] = useState([] as Tag[]);
+  const [backStack, setBackStack] = useState([] as (() => void)[]);
+
   const searchBarRef = useRef<HTMLInputElement>(null);
   const { friends } = useFriends();
   const { tags } = useTags();
+
+  console.log(backStack);
 
   const filteredFriends =
     friends &&
@@ -68,6 +72,14 @@ export default function MainPage(props: MainPageProps) {
     if (searchBarRef.current) {
       searchBarRef.current.focus();
     }
+  };
+
+  const addToBackStack = (backFn: () => void) => {
+    setBackStack([...backStack, backFn]);
+  };
+
+  const popOffBackStack = () => {
+    setBackStack(backStack.slice(0, -1));
   };
 
   const switchToAddFriendForm = () =>
@@ -86,9 +98,14 @@ export default function MainPage(props: MainPageProps) {
   ];
   useKeyboardControl(keyboardHooks);
 
-  const startEditingFriend = (id: string) => {
+  const editFriend = (id: string) => {
     setFriendIdBeingUpdated(id);
     props.setPageState(PageState.EDIT_FRIEND);
+  };
+
+  const editFriendFromHome = (id: string) => {
+    editFriend(id);
+    addToBackStack(switchToFriendList);
   };
 
   const selectFriend = (id: string) => {
@@ -96,10 +113,48 @@ export default function MainPage(props: MainPageProps) {
     props.setPageState(PageState.FRIEND_DETAIL);
   };
 
+  const selectFriendFromHome = (id: string) => {
+    selectFriend(id);
+    addToBackStack(switchToFriendList);
+  };
+
+  const selectFriendFromDetail = (id: string) => {
+    selectFriend(id);
+    if (selectedFriendId) {
+      addToBackStack(() => selectFriend(selectedFriendId));
+    }
+  };
+
+  const editFriendFromDetail = (id: string) => {
+    editFriend(id);
+    if (selectedFriendId) {
+      addToBackStack(() => selectFriend(selectedFriendId));
+    }
+  };
+
   const friendBeingEdited =
     friends && friends.find((friend) => friend.id === friendIdBeingUpdated);
   const selectedFriend =
     friends && friends.find((friend) => friend.id === selectedFriendId);
+
+  const goBack = () => {
+    if (backStack.length === 0) {
+      switchToFriendList();
+    } else {
+      const goBackFn = backStack[backStack.length - 1];
+      goBackFn();
+      popOffBackStack();
+    }
+  };
+
+  const deleteAndGoBack = async (friendId: string) => {
+    removeFriend(friendId).then(() => goBack);
+  };
+
+  const goHome = () => {
+    setBackStack([]);
+    switchToFriendList();
+  };
 
   return (
     friends &&
@@ -161,8 +216,8 @@ export default function MainPage(props: MainPageProps) {
                 <FriendCard
                   key={friend.id}
                   friend={friend}
-                  startEditingFn={() => startEditingFriend(friend.id)}
-                  selectFriendFn={() => selectFriend(friend.id)}
+                  startEditingFn={() => editFriendFromHome(friend.id)}
+                  selectFriendFn={() => selectFriendFromHome(friend.id)}
                 />
               ))}
             </div>
@@ -177,7 +232,7 @@ export default function MainPage(props: MainPageProps) {
           friendIdBeingUpdated &&
           friendBeingEdited ? (
           <AddFriendForm
-            onSubmit={switchToFriendList}
+            onSubmit={goBack}
             submitFriendFn={(f: FriendToSubmit) =>
               updateFriend(friendIdBeingUpdated, f)
             }
@@ -188,10 +243,14 @@ export default function MainPage(props: MainPageProps) {
           <RecordHangForm onSubmit={switchToFriendList} friends={friends} />
         ) : props.pageState === PageState.FRIEND_DETAIL && selectedFriend ? (
           <FriendDetailPage
+            goHome={goHome}
             friend={selectedFriend}
             friends={friends}
-            onGoBack={switchToFriendList}
-            selectFriendFn={selectFriend}
+            onGoBack={goBack}
+            selectFriendFn={selectFriendFromDetail}
+            edit={() => editFriendFromDetail(selectedFriend.id)}
+            delete={() => deleteAndGoBack(selectedFriend.id)}
+            showHomeIcon={backStack.length > 1}
           />
         ) : props.pageState === PageState.DEV ? (
           <Dev friends={friends} tags={tags} />
@@ -202,3 +261,7 @@ export default function MainPage(props: MainPageProps) {
     )
   );
 }
+
+// friend list
+// detail page
+// edit page

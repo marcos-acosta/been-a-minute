@@ -6,7 +6,7 @@ import {
 } from "../logic/rendering";
 import styles from "./FriendCard.module.css";
 import { getDaysOverdue, getLastHangDate } from "../logic/logic";
-import { andStopPropagate, joinNodes } from "../logic/util";
+import { joinNodes } from "../logic/util";
 import { useState } from "react";
 import { removeFriend } from "../logic/database";
 import Tag from "./Tag";
@@ -51,17 +51,17 @@ export default function FriendCard({
           <div className={styles.actionButtonsContainer}>
             {joinNodes(
               [
-                <button className={styles.actionButton}>
-                  <Pencil1Icon
-                    onClick={(e) => andStopPropagate(e, startEditingFn)}
-                  />
+                <button
+                  className={styles.actionButton}
+                  onClick={startEditingFn}
+                >
+                  <Pencil1Icon />
                 </button>,
-                <button className={styles.actionButton}>
-                  <TrashIcon
-                    onClick={(e) =>
-                      andStopPropagate(e, () => handleDelete(friend.id))
-                    }
-                  />
+                <button
+                  className={styles.actionButton}
+                  onClick={() => handleDelete(friend.id)}
+                >
+                  <TrashIcon />
                 </button>,
               ],
               <div className={styles.space}></div>

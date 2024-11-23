@@ -38,7 +38,7 @@ export default function RecordHang(props: RecordHangProps) {
   return (
     <div className={formStyles.formPage}>
       <button className={formStyles.backButton} onClick={props.onSubmit}>
-        <ArrowLeftIcon />
+        <ArrowLeftIcon className={mainStyles.withinButtonIcon} />
         <span className={formStyles.backButtonText}>back</span>
       </button>
       <div className={formStyles.title}>Record a hang</div>

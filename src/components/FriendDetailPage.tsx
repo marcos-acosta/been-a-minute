@@ -1,16 +1,27 @@
 import { Friend, FriendBasic } from "../../triplit/schema";
 import { getFullName } from "../logic/logic";
 import styles from "./FriendDetailPage.module.css";
+import mainStyles from "./MainPage.module.css";
 import formStyles from "./FormStyling.module.css";
 import Hang from "./Hang";
 import Tag from "./Tag";
 import { joinNodes } from "../logic/util";
+import {
+  ArrowLeftIcon,
+  HomeIcon,
+  Pencil1Icon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 
 interface FriendDetailPageProps {
   friend: Friend;
   friends: FriendBasic[];
   onGoBack: () => void;
   selectFriendFn: (id: string) => void;
+  edit: () => void;
+  delete: () => void;
+  goHome: () => void;
+  showHomeIcon: boolean;
 }
 
 export default function FriendDetailPage(props: FriendDetailPageProps) {
@@ -24,9 +35,41 @@ export default function FriendDetailPage(props: FriendDetailPageProps) {
       <div className={styles.friendDetailsContainer}>
         <div className={styles.friendDetails}>
           <div className={styles.backButtonContainer}>
-            <button className={formStyles.backButton} onClick={props.onGoBack}>
-              back
-            </button>
+            {joinNodes(
+              [
+                props.showHomeIcon && (
+                  <button
+                    className={formStyles.backButton}
+                    onClick={props.goHome}
+                  >
+                    <HomeIcon className={mainStyles.withinButtonIcon} />
+                    home
+                  </button>
+                ),
+                <button
+                  className={formStyles.backButton}
+                  onClick={props.onGoBack}
+                >
+                  <ArrowLeftIcon className={mainStyles.withinButtonIcon} />
+                  back
+                </button>,
+                <button
+                  className={mainStyles.themedButton}
+                  onClick={props.edit}
+                >
+                  <Pencil1Icon className={mainStyles.withinButtonIcon} />
+                  edit
+                </button>,
+                <button
+                  className={mainStyles.themedButton}
+                  onClick={props.delete}
+                >
+                  <TrashIcon className={mainStyles.withinButtonIcon} />
+                  delete
+                </button>,
+              ].filter(Boolean),
+              <span className={styles.buttonSeparator} />
+            )}
           </div>
           <div className={styles.nameContainer}>
             {getFullName(props.friend)}
@@ -41,16 +84,23 @@ export default function FriendDetailPage(props: FriendDetailPageProps) {
               )}
             </div>
           )}
-          {props.friend.relation && (
-            <div className={styles.friendNote}>{props.friend.relation}</div>
-          )}
+          <div className={styles.friendNote}>
+            {props.friend.relation ? (
+              <span>{props.friend.relation}</span>
+            ) : (
+              <span className={styles.noDescription}>
+                No description for {props.friend.first_name}! But you can{" "}
+                <button className={styles.editText} onClick={props.edit}>
+                  add one
+                </button>{" "}
+                anytime.
+              </span>
+            )}
+          </div>
         </div>
         <div className={styles.hangListContainer}>
           {hangs.length > 0 ? (
             <>
-              <div className={styles.hangTitleContainer}>
-                <div className={styles.hangTitle}>Recent hangs</div>
-              </div>
               <div className={styles.hangList}>
                 {hangs.map((hang) => (
                   <Hang
