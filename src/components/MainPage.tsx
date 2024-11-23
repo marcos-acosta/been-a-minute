@@ -17,8 +17,14 @@ import AddFriendForm from "./AddFriendForm";
 import RecordHangForm from "./RecordHangForm";
 import { combineClasses } from "./../logic/util";
 import { PageState } from "../App";
-import { addFriend, removeFriend, updateFriend } from "../logic/database";
-import { FriendToSubmit, Tag } from "../../triplit/schema";
+import {
+  addFriend,
+  addHang,
+  removeFriend,
+  updateFriend,
+  updateHang,
+} from "../logic/database";
+import { FriendToSubmit, HangToSubmit, Tag } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
 import { tagToColor } from "../logic/rendering";
 import FriendDetailPage from "./FriendDetailPage";
@@ -39,6 +45,12 @@ function useTags() {
   return { tags, error };
 }
 
+function useHangs() {
+  const hangsQuery = triplit.query("friend_log");
+  const { results: hangs, error } = useQuery(triplit, hangsQuery);
+  return { hangs, error };
+}
+
 interface MainPageProps {
   pageState: PageState;
   setPageState: (p: PageState) => void;
@@ -47,6 +59,9 @@ interface MainPageProps {
 export default function MainPage(props: MainPageProps) {
   const [searchText, setSearchText] = useState("");
   const [friendIdBeingUpdated, setFriendIdBeingUpdated] = useState(
+    null as null | string
+  );
+  const [hangIdBeingUpdated, setHangIdBeingUpdated] = useState(
     null as null | string
   );
   const [selectedFriendId, setSelectedFriendId] = useState(
@@ -58,6 +73,7 @@ export default function MainPage(props: MainPageProps) {
   const searchBarRef = useRef<HTMLInputElement>(null);
   const { friends } = useFriends();
   const { tags } = useTags();
+  const { hangs } = useHangs();
 
   console.log(backStack);
 
@@ -87,6 +103,7 @@ export default function MainPage(props: MainPageProps) {
   const switchToRecordHangForm = () =>
     props.setPageState(PageState.RECORD_A_HANG);
   const switchToFriendList = () => props.setPageState(PageState.FRIEND_LIST);
+  const switchToEditHangForm = () => props.setPageState(PageState.EDIT_HANG);
 
   const keyboardHooks: KeyboardHook[] = [
     {
@@ -132,10 +149,24 @@ export default function MainPage(props: MainPageProps) {
     }
   };
 
+  const editHang = (id: string) => {
+    setHangIdBeingUpdated(id);
+    switchToEditHangForm();
+  };
+
+  const startEditingHangFromDetail = (hangId: string) => {
+    editHang(hangId);
+    if (selectedFriendId) {
+      addToBackStack(() => selectFriend(selectedFriendId));
+    }
+  };
+
   const friendBeingEdited =
     friends && friends.find((friend) => friend.id === friendIdBeingUpdated);
   const selectedFriend =
     friends && friends.find((friend) => friend.id === selectedFriendId);
+  const hangBeingEdited =
+    hangs && hangs.find((hang) => hang.id === hangIdBeingUpdated);
 
   const goBack = () => {
     if (backStack.length === 0) {
@@ -224,7 +255,7 @@ export default function MainPage(props: MainPageProps) {
           </>
         ) : props.pageState === PageState.ADD_A_FRIEND ? (
           <AddFriendForm
-            onSubmit={switchToFriendList}
+            onSubmit={goHome}
             submitFriendFn={addFriend}
             tags={tags}
           />
@@ -240,7 +271,11 @@ export default function MainPage(props: MainPageProps) {
             existingFriend={friendBeingEdited}
           />
         ) : props.pageState === PageState.RECORD_A_HANG ? (
-          <RecordHangForm onSubmit={switchToFriendList} friends={friends} />
+          <RecordHangForm
+            onSubmit={goHome}
+            friends={friends}
+            submitHangFn={addHang}
+          />
         ) : props.pageState === PageState.FRIEND_DETAIL && selectedFriend ? (
           <FriendDetailPage
             goHome={goHome}
@@ -251,9 +286,19 @@ export default function MainPage(props: MainPageProps) {
             edit={() => editFriendFromDetail(selectedFriend.id)}
             delete={() => deleteAndGoBack(selectedFriend.id)}
             showHomeIcon={backStack.length > 1}
+            startEditingHang={startEditingHangFromDetail}
           />
         ) : props.pageState === PageState.DEV ? (
           <Dev friends={friends} tags={tags} />
+        ) : props.pageState === PageState.EDIT_HANG && hangIdBeingUpdated ? (
+          <RecordHangForm
+            onSubmit={goBack}
+            friends={friends}
+            submitHangFn={(h: HangToSubmit) =>
+              updateHang(hangIdBeingUpdated, h)
+            }
+            hangToUpdate={hangBeingEdited}
+          />
         ) : (
           <div>Unknown page state</div>
         )}

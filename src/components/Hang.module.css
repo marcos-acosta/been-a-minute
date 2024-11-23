@@ -12,6 +12,12 @@
   font-style: italic;
 }
 
+.hangDateContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .hangDate {
   font-family: "Noto Serif", serif;
   font-size: 25px;
@@ -31,4 +37,11 @@
 
 .hangNote {
   margin-top: 10px;
+}
+
+.actionButtonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px;
 }

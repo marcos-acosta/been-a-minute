@@ -1,24 +1,34 @@
 import { useState } from "react";
 import formStyles from "./FormStyling.module.css";
 import mainStyles from "./MainPage.module.css";
-import { FriendBasic } from "../../triplit/schema";
+import { FriendBasic, HangBasic, HangToSubmit } from "../../triplit/schema";
 import AutocompleteInput from "./AutocompleteInput";
 import { combineClasses } from "../logic/util";
 import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { getFullName } from "../logic/logic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { addHang } from "../logic/database";
 
 interface RecordHangProps {
   onSubmit: () => void;
   friends: FriendBasic[];
+  hangToUpdate?: HangBasic;
+  submitHangFn: (h: HangToSubmit) => void;
 }
 
+const getInitialFriends = (friendIds: Set<string>, friends: FriendBasic[]) =>
+  friends.filter((friend) => friendIds.has(friend.id));
+
 export default function RecordHang(props: RecordHangProps) {
-  const [selectedDate, setSelectedDate] = useState(new Date() as Date | null);
-  const [selectedFriends, setSelectedFriends] = useState([] as FriendBasic[]);
-  const [note, setNote] = useState("");
+  const [selectedDate, setSelectedDate] = useState(
+    props.hangToUpdate?.date_contacted || (new Date() as Date | null)
+  );
+  const [selectedFriends, setSelectedFriends] = useState(
+    props.hangToUpdate
+      ? getInitialFriends(props.hangToUpdate.friend_ids, props.friends)
+      : ([] as FriendBasic[])
+  );
+  const [note, setNote] = useState(props.hangToUpdate?.notes || "");
 
   const canSubmit = selectedFriends.length > 0 && selectedDate;
 
@@ -26,11 +36,12 @@ export default function RecordHang(props: RecordHangProps) {
     e.preventDefault();
     if (canSubmit) {
       const noteOrNothing = note.length > 0 ? note : undefined;
-      addHang(
-        selectedFriends.map((friend) => friend.id),
-        selectedDate,
-        noteOrNothing
-      );
+      const newHang: HangToSubmit = {
+        friend_ids: new Set(selectedFriends.map((friend) => friend.id)),
+        date_contacted: selectedDate,
+        notes: noteOrNothing,
+      };
+      props.submitHangFn(newHang);
       props.onSubmit();
     }
   };
@@ -41,7 +52,9 @@ export default function RecordHang(props: RecordHangProps) {
         <ArrowLeftIcon className={mainStyles.withinButtonIcon} />
         <span className={formStyles.backButtonText}>back</span>
       </button>
-      <div className={formStyles.title}>Record a hang</div>
+      <div className={formStyles.title}>
+        {props.hangToUpdate ? "Update" : "Record"} a hang
+      </div>
       <form onSubmit={handleSubmit}>
         <div className={formStyles.formContainer}>
           <div className={formStyles.formLabelContainer}>
@@ -111,7 +124,8 @@ export default function RecordHang(props: RecordHangProps) {
               )}
               disabled={!canSubmit}
             >
-              <Pencil2Icon className={mainStyles.withinButtonIcon} /> record
+              <Pencil2Icon className={mainStyles.withinButtonIcon} />{" "}
+              {props.hangToUpdate ? "update " : "record "}
               hang
             </button>
           </div>

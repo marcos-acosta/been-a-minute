@@ -77,6 +77,8 @@ export interface Friend extends FriendBasic {
 export interface FriendToSubmit
   extends Omit<FriendBasic, "id" | "created_at"> {}
 
+export interface HangToSubmit extends Omit<HangBasic, "id" | "created_at"> {}
+
 export interface Tag extends TagBasic {
   tagged_friends: FriendBasic[];
 }

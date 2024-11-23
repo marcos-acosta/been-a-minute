@@ -22,6 +22,7 @@ interface FriendDetailPageProps {
   delete: () => void;
   goHome: () => void;
   showHomeIcon: boolean;
+  startEditingHang: (id: string) => void;
 }
 
 export default function FriendDetailPage(props: FriendDetailPageProps) {
@@ -109,6 +110,7 @@ export default function FriendDetailPage(props: FriendDetailPageProps) {
                     key={hang.id}
                     selectFriendFn={props.selectFriendFn}
                     selectedFriendId={props.friend.id}
+                    startEditingHang={() => props.startEditingHang(hang.id)}
                   />
                 ))}
               </div>

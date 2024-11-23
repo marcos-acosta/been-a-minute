@@ -3,6 +3,7 @@ import {
   Friend,
   FriendToSubmit,
   HangBasic,
+  HangToSubmit,
   TagBasic,
 } from "../../triplit/schema";
 
@@ -24,20 +25,25 @@ export const removeFriend = async (friendId: string) => {
   return await triplit.delete("friends", friendId);
 };
 
-export const addHang = async (
-  friendIds: string[],
-  date: Date,
-  note?: string
-) => {
-  await triplit.insert("friend_log", {
-    date_contacted: date,
-    friend_ids: new Set(friendIds),
-    notes: note,
-  });
+export const addHang = async (hang: HangToSubmit) => {
+  await triplit.insert("friend_log", hang);
 };
 
 export const addHangNew = async (hang: HangBasic) => {
   await triplit.insert("friend_log", hang);
+};
+
+export const removeHang = async (hangId: string) => {
+  return await triplit.delete("friend_log", hangId);
+};
+
+export const updateHang = async (
+  hangId: string,
+  newHang: Partial<HangBasic>
+) => {
+  return await triplit.update("friend_log", hangId, async (hang) => {
+    Object.assign(hang, newHang);
+  });
 };
 
 export const saveTag = async (tagText: string) => {
