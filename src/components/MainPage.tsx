@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { triplit } from "../../triplit/client";
+import { client } from "../../triplit/client";
 import { useQuery } from "@triplit/react";
 import styles from "./MainPage.module.css";
 import {
@@ -15,7 +15,7 @@ import {
 import useKeyboardControl, { KeyboardHook } from "react-keyboard-control";
 import AddFriendForm from "./AddFriendForm";
 import RecordHangForm from "./RecordHangForm";
-import { combineClasses } from "./../logic/util";
+import { combineClasses, joinNodes } from "./../logic/util";
 import { PageState } from "../App";
 import {
   addFriend,
@@ -31,23 +31,23 @@ import FriendDetailPage from "./FriendDetailPage";
 import Dev from "./Dev";
 
 function useFriends() {
-  const friendsQuery = triplit
+  const friendsQuery = client
     .query("friends")
     .include("meetings")
     .include("tags");
-  const { results: friends, error } = useQuery(triplit, friendsQuery);
+  const { results: friends, error } = useQuery(client, friendsQuery);
   return { friends, error };
 }
 
 function useTags() {
-  const tagsQuery = triplit.query("tags").include("tagged_friends");
-  const { results: tags, error } = useQuery(triplit, tagsQuery);
+  const tagsQuery = client.query("tags").include("tagged_friends");
+  const { results: tags, error } = useQuery(client, tagsQuery);
   return { tags, error };
 }
 
 function useHangs() {
-  const hangsQuery = triplit.query("friend_log");
-  const { results: hangs, error } = useQuery(triplit, hangsQuery);
+  const hangsQuery = client.query("friend_log");
+  const { results: hangs, error } = useQuery(client, hangsQuery);
   return { hangs, error };
 }
 
@@ -71,11 +71,10 @@ export default function MainPage(props: MainPageProps) {
   const [backStack, setBackStack] = useState([] as (() => void)[]);
 
   const searchBarRef = useRef<HTMLInputElement>(null);
+
   const { friends } = useFriends();
   const { tags } = useTags();
   const { hangs } = useHangs();
-
-  console.log(backStack);
 
   const filteredFriends =
     friends &&
@@ -190,123 +189,127 @@ export default function MainPage(props: MainPageProps) {
   return (
     friends &&
     tags && (
-      <div className={combineClasses(styles.appContainer, "sourceSansBasic")}>
-        {props.pageState === PageState.FRIEND_LIST ? (
-          <>
-            <div className={styles.header}>
-              <div className={styles.filterPanel}>
-                <div className={styles.addFriendButtonContainer}>
-                  <button
-                    className={styles.themedButton}
-                    onClick={switchToAddFriendForm}
-                  >
-                    <PersonIcon className={styles.withinButtonIcon} /> add
-                    friend
-                  </button>
-                </div>
-                <div className={styles.searchContainer}>
-                  <div className={styles.searchIconContainer}>
-                    <MagnifyingGlassIcon />
+      <>
+        <div className={combineClasses(styles.appContainer, "sourceSansBasic")}>
+          {props.pageState === PageState.FRIEND_LIST ? (
+            <>
+              <div className={styles.header}>
+                <div className={styles.filterPanel}>
+                  <div className={styles.addFriendButtonContainer}>
+                    {joinNodes(
+                      [
+                        <button
+                          className={styles.themedButton}
+                          onClick={switchToAddFriendForm}
+                        >
+                          <PersonIcon className={styles.withinButtonIcon} /> add
+                          friend
+                        </button>,
+                        <button
+                          className={styles.themedButton}
+                          onClick={switchToRecordHangForm}
+                        >
+                          <Pencil2Icon className={styles.withinButtonIcon} />
+                          record hang
+                        </button>,
+                      ],
+                      <div className={styles.buttonGap} />
+                    )}
                   </div>
-                  <AutocompleteInput
-                    options={tags}
-                    selectedOptions={selectedTags}
-                    setSelectedOptions={setSelectedTags}
-                    labelFunction={(t: Tag) => t.name}
-                    getOptionId={(t: Tag) => t.id}
-                    allowAddNew={false}
-                    optionStylingFunction={(t: Tag) => ({
-                      backgroundColor: tagToColor(t),
-                      fontFamily: "monospace",
-                      paddingTop: "5px",
-                      paddingBottom: "5px",
-                      fontSize: "14px",
-                    })}
-                    placeholder={"search"}
-                    activationCharacter="#"
-                    remainderText={searchText}
-                    setRemainderText={setSearchText}
-                    inputClasses={[styles.searchInput]}
-                    inputRef={searchBarRef}
-                    showResultsOnActivationCharacter
-                  />
-                </div>
-                <div className={styles.addHangButtonContainer}>
-                  <button
-                    className={styles.themedButton}
-                    onClick={switchToRecordHangForm}
-                  >
-                    <Pencil2Icon className={styles.withinButtonIcon} />
-                    record hang
-                  </button>
+                  <div className={styles.searchContainer}>
+                    <div className={styles.searchIconContainer}>
+                      <MagnifyingGlassIcon />
+                    </div>
+                    <AutocompleteInput
+                      options={tags}
+                      selectedOptions={selectedTags}
+                      setSelectedOptions={setSelectedTags}
+                      labelFunction={(t: Tag) => t.name}
+                      getOptionId={(t: Tag) => t.id}
+                      allowAddNew={false}
+                      optionStylingFunction={(t: Tag) => ({
+                        backgroundColor: tagToColor(t),
+                        fontFamily: "monospace",
+                        paddingTop: "5px",
+                        paddingBottom: "5px",
+                        fontSize: "14px",
+                      })}
+                      placeholder={"search"}
+                      activationCharacter="#"
+                      remainderText={searchText}
+                      setRemainderText={setSearchText}
+                      inputClasses={[styles.searchInput]}
+                      inputRef={searchBarRef}
+                      showResultsOnActivationCharacter
+                    />
+                  </div>
+                  <div className={styles.addHangButtonContainer}>
+                    sign in/out
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className={styles.friendListContainer}>
-              {sortedFriends?.map((friend) => (
-                <FriendCard
-                  key={friend.id}
-                  friend={friend}
-                  startEditingFn={() => editFriendFromHome(friend.id)}
-                  selectFriendFn={() => selectFriendFromHome(friend.id)}
-                />
-              ))}
-            </div>
-          </>
-        ) : props.pageState === PageState.ADD_A_FRIEND ? (
-          <AddFriendForm
-            onSubmit={goHome}
-            submitFriendFn={addFriend}
-            tags={tags}
-          />
-        ) : props.pageState === PageState.EDIT_FRIEND &&
-          friendIdBeingUpdated &&
-          friendBeingEdited ? (
-          <AddFriendForm
-            onSubmit={goBack}
-            submitFriendFn={(f: FriendToSubmit) =>
-              updateFriend(friendIdBeingUpdated, f)
-            }
-            tags={tags}
-            existingFriend={friendBeingEdited}
-          />
-        ) : props.pageState === PageState.RECORD_A_HANG ? (
-          <RecordHangForm
-            onSubmit={goHome}
-            friends={friends}
-            submitHangFn={addHang}
-          />
-        ) : props.pageState === PageState.FRIEND_DETAIL && selectedFriend ? (
-          <FriendDetailPage
-            goHome={goHome}
-            friend={selectedFriend}
-            friends={friends}
-            onGoBack={goBack}
-            selectFriendFn={selectFriendFromDetail}
-            edit={() => editFriendFromDetail(selectedFriend.id)}
-            delete={() => deleteAndGoBack(selectedFriend.id)}
-            showHomeIcon={backStack.length > 1}
-            startEditingHang={startEditingHangFromDetail}
-          />
-        ) : props.pageState === PageState.DEV ? (
-          <Dev friends={friends} tags={tags} />
-        ) : props.pageState === PageState.EDIT_HANG && hangIdBeingUpdated ? (
-          <RecordHangForm
-            onSubmit={goBack}
-            friends={friends}
-            submitHangFn={(h: HangToSubmit) =>
-              updateHang(hangIdBeingUpdated, h)
-            }
-            hangToUpdate={hangBeingEdited}
-          />
-        ) : (
-          <div>Unknown page state</div>
-        )}
-      </div>
+              <div className={styles.friendListContainer}>
+                {sortedFriends?.map((friend) => (
+                  <FriendCard
+                    key={friend.id}
+                    friend={friend}
+                    startEditingFn={() => editFriendFromHome(friend.id)}
+                    selectFriendFn={() => selectFriendFromHome(friend.id)}
+                  />
+                ))}
+              </div>
+            </>
+          ) : props.pageState === PageState.ADD_A_FRIEND ? (
+            <AddFriendForm
+              onSubmit={goHome}
+              submitFriendFn={addFriend}
+              tags={tags}
+            />
+          ) : props.pageState === PageState.EDIT_FRIEND &&
+            friendIdBeingUpdated &&
+            friendBeingEdited ? (
+            <AddFriendForm
+              onSubmit={goBack}
+              submitFriendFn={(f: FriendToSubmit) =>
+                updateFriend(friendIdBeingUpdated, f)
+              }
+              tags={tags}
+              existingFriend={friendBeingEdited}
+            />
+          ) : props.pageState === PageState.RECORD_A_HANG ? (
+            <RecordHangForm
+              onSubmit={goHome}
+              friends={friends}
+              submitHangFn={addHang}
+            />
+          ) : props.pageState === PageState.FRIEND_DETAIL && selectedFriend ? (
+            <FriendDetailPage
+              goHome={goHome}
+              friend={selectedFriend}
+              friends={friends}
+              onGoBack={goBack}
+              selectFriendFn={selectFriendFromDetail}
+              edit={() => editFriendFromDetail(selectedFriend.id)}
+              delete={() => deleteAndGoBack(selectedFriend.id)}
+              showHomeIcon={backStack.length > 1}
+              startEditingHang={startEditingHangFromDetail}
+            />
+          ) : props.pageState === PageState.DEV ? (
+            <Dev friends={friends} tags={tags} />
+          ) : props.pageState === PageState.EDIT_HANG && hangIdBeingUpdated ? (
+            <RecordHangForm
+              onSubmit={goBack}
+              friends={friends}
+              submitHangFn={(h: HangToSubmit) =>
+                updateHang(hangIdBeingUpdated, h)
+              }
+              hangToUpdate={hangBeingEdited}
+            />
+          ) : (
+            <div>Unknown page state</div>
+          )}
+        </div>
+      </>
     )
   );
 }
-
-// friend list
-// detail page
-// edit page
